@@ -1,5 +1,7 @@
 # ConcursosLiterarios
 
+Los cambios notables de cada versión se documentan en [CHANGELOG.md](./CHANGELOG.md) (formato [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)).
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.1.
 
 ## Development server
