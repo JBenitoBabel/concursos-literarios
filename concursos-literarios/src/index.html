@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es" data-theme="modern">
+<head>
+  <meta charset="utf-8">
+  <title>Concursos Literarios - Listado de certámenes y premios</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Buscador de concursos literarios actualizado desde escritores.org. Filtra por categoría, tipo de premio y busca por palabras clave.">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('concursos-theme');
+        if (t === 'modern' || t === 'scifi' || t === 'wonderful' || t === 'retro') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

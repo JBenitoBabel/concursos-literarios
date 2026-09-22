@@ -1,0 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;700&family=Baloo+2:wght@600;700&family=VT323&display=swap');
+
+// ── Theme: Moderno (default) ───────────────────────────────
+:root,
+[data-theme='modern'] {
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --border: #e2e8f0;
+  --border-width: 1px;
+  --border-strong: #cbd5e1;
+  --card-hover-border: #cbd5e1;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef2ff;
+  --accent-ring: rgb(79 70 229 / 0.15);
+  --accent-shadow: rgb(79 70 229 / 0.3);
+  --accent-contrast: #ffffff;
+
+  --input-bg: #ffffff;
+  --check-bg: #ffffff;
+  --check-border: #cbd5e1;
+
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-md: 0 4px 12px -2px rgb(15 23 42 / 0.08);
+  --shadow-lg: 0 12px 24px -6px rgb(15 23 42 / 0.12);
+  --card-hover-shadow: 0 4px 12px -2px rgb(15 23 42 / 0.1);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --header-bg: rgb(255 255 255 / 0.92);
+
+  --danger: #ef4444;
+
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --cat-poesia-bg: #ffe4e6;   --cat-poesia-fg: #be123c;
+  --cat-novela-bg: #e0f2fe;   --cat-novela-fg: #0369a1;
+  --cat-relato-bg: #d1fae5;   --cat-relato-fg: #047857;
+  --cat-ensayo-bg: #ede9fe;   --cat-ensayo-fg: #6d28d9;
+  --cat-teatro-bg: #ffedd5;   --cat-teatro-fg: #c2410c;
+  --cat-infantil-bg: #cffafe; --cat-infantil-fg: #0e7490;
+  --cat-otro-bg: #f1f5f9;     --cat-otro-fg: #475569;
+
+  --prize-dinero-bg: #fef3c7;        --prize-dinero-fg: #b45309;
+  --prize-publicacion-bg: #dbeafe;   --prize-publicacion-fg: #1d4ed8;
+  --prize-becas-bg: #ede9fe;         --prize-becas-fg: #6d28d9;
+  --prize-reconocimiento-bg: #ffe4e6; --prize-reconocimiento-fg: #be123c;
+  --prize-otro-bg: #f1f5f9;          --prize-otro-fg: #475569;
+
+  --badge-soon-bg: #fef3c7; --badge-soon-fg: #b45309;
+  --badge-passed-bg: #f1f5f9; --badge-passed-fg: #64748b;
+}
+
+// ── Theme: Sci-Fi ──────────────────────────────────────────
+[data-theme='scifi'] {
+  --bg-page: #0b1220;
+  --bg-card: #111827;
+  --bg-subtle: #0f172a;
+  --border: #1f2a44;
+  --border-width: 1px;
+  --border-strong: #334155;
+  --card-hover-border: #22d3ee;
+
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent: #22d3ee;
+  --accent-hover: #67e8f9;
+  --accent-soft: rgb(34 211 238 / 0.12);
+  --accent-ring: rgb(34 211 238 / 0.25);
+  --accent-shadow: rgb(34 211 238 / 0.35);
+  --accent-contrast: #082f49;
+
+  --input-bg: #0f172a;
+  --check-bg: #0f172a;
+  --check-border: #334155;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 16px -4px rgb(34 211 238 / 0.15);
+  --shadow-lg: 0 12px 28px -6px rgb(34 211 238 / 0.25);
+  --card-hover-shadow: 0 0 0 1px rgb(34 211 238 / 0.4), 0 0 24px -4px rgb(34 211 238 / 0.3);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --header-bg: rgb(11 18 32 / 0.92);
+
+  --danger: #f87171;
+
+  --font-display: 'Orbitron', 'Inter', sans-serif;
+
+  --cat-poesia-bg: rgb(244 63 94 / 0.15);  --cat-poesia-fg: #fb7185;
+  --cat-novela-bg: rgb(56 189 248 / 0.15);  --cat-novela-fg: #38bdf8;
+  --cat-relato-bg: rgb(52 211 153 / 0.15);  --cat-relato-fg: #34d399;
+  --cat-ensayo-bg: rgb(167 139 250 / 0.18); --cat-ensayo-fg: #a78bfa;
+  --cat-teatro-bg: rgb(251 146 60 / 0.15);  --cat-teatro-fg: #fb923c;
+  --cat-infantil-bg: rgb(45 212 191 / 0.15); --cat-infantil-fg: #2dd4bf;
+  --cat-otro-bg: rgb(148 163 184 / 0.15);   --cat-otro-fg: #94a3b8;
+
+  --prize-dinero-bg: rgb(250 204 21 / 0.15);  --prize-dinero-fg: #facc15;
+  --prize-publicacion-bg: rgb(96 165 250 / 0.15); --prize-publicacion-fg: #60a5fa;
+  --prize-becas-bg: rgb(192 132 252 / 0.18);  --prize-becas-fg: #c084fc;
+  --prize-reconocimiento-bg: rgb(251 113 133 / 0.15); --prize-reconocimiento-fg: #fb7185;
+  --prize-otro-bg: rgb(148 163 184 / 0.15);   --prize-otro-fg: #94a3b8;
+
+  --badge-soon-bg: rgb(250 204 21 / 0.15); --badge-soon-fg: #facc15;
+  --badge-passed-bg: rgb(100 116 139 / 0.2); --badge-passed-fg: #94a3b8;
+}
+
+// ── Theme: Wonderful ───────────────────────────────────────
+[data-theme='wonderful'] {
+  --bg-page: #faf5ff;
+  --bg-card: #ffffff;
+  --bg-subtle: #f5f3ff;
+  --border: #f3e8ff;
+  --border-width: 1px;
+  --border-strong: #e9d5ff;
+  --card-hover-border: #f9a8d4;
+
+  --text-primary: #3b0764;
+  --text-secondary: #6b21a8;
+  --text-muted: #a78bfa;
+
+  --accent: #ec4899;
+  --accent-hover: #db2777;
+  --accent-soft: #fdf2f8;
+  --accent-ring: rgb(236 72 153 / 0.2);
+  --accent-shadow: rgb(236 72 153 / 0.3);
+  --accent-contrast: #ffffff;
+
+  --input-bg: #ffffff;
+  --check-bg: #ffffff;
+  --check-border: #e9d5ff;
+
+  --shadow-sm: 0 1px 2px rgb(190 24 93 / 0.06);
+  --shadow-md: 0 6px 16px -4px rgb(190 24 93 / 0.12);
+  --shadow-lg: 0 14px 30px -8px rgb(190 24 93 / 0.18);
+  --card-hover-shadow: 0 6px 16px -4px rgb(190 24 93 / 0.15);
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --header-bg: rgb(255 255 255 / 0.92);
+
+  --danger: #e11d48;
+
+  --font-display: 'Baloo 2', 'Inter', sans-serif;
+
+  --cat-poesia-bg: #ffe4e6;   --cat-poesia-fg: #e11d48;
+  --cat-novela-bg: #e0f2fe;   --cat-novela-fg: #0284c7;
+  --cat-relato-bg: #dcfce7;   --cat-relato-fg: #16a34a;
+  --cat-ensayo-bg: #f3e8ff;   --cat-ensayo-fg: #9333ea;
+  --cat-teatro-bg: #ffedd5;   --cat-teatro-fg: #ea580c;
+  --cat-infantil-bg: #cffafe; --cat-infantil-fg: #0891b2;
+  --cat-otro-bg: #f1f5f9;     --cat-otro-fg: #64748b;
+
+  --prize-dinero-bg: #fef3c7;      --prize-dinero-fg: #b45309;
+  --prize-publicacion-bg: #dbeafe; --prize-publicacion-fg: #2563eb;
+  --prize-becas-bg: #fae8ff;       --prize-becas-fg: #a21caf;
+  --prize-reconocimiento-bg: #ffe4e6; --prize-reconocimiento-fg: #e11d48;
+  --prize-otro-bg: #f1f5f9;        --prize-otro-fg: #64748b;
+
+  --badge-soon-bg: #fef3c7;   --badge-soon-fg: #b45309;
+  --badge-passed-bg: #f1f5f9; --badge-passed-fg: #7c3aed;
+}
+
+// ── Theme: Retro / 90s ─────────────────────────────────────
+[data-theme='retro'] {
+  --bg-page: #fffbeb;
+  --bg-card: #ffffff;
+  --bg-subtle: #fef9c3;
+  --border: #000000;
+  --border-width: 2px;
+  --border-strong: #000000;
+  --card-hover-border: #000000;
+
+  --text-primary: #000000;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+
+  --accent: #ec4899;
+  --accent-hover: #db2777;
+  --accent-soft: #fce7f3;
+  --accent-ring: rgb(236 72 153 / 0.35);
+  --accent-shadow: #000000;
+  --accent-contrast: #ffffff;
+
+  --input-bg: #ffffff;
+  --check-bg: #ffffff;
+  --check-border: #000000;
+
+  --shadow-sm: 2px 2px 0 #000000;
+  --shadow-md: 4px 4px 0 #000000;
+  --shadow-lg: 6px 6px 0 #000000;
+  --card-hover-shadow: 4px 4px 0 #000000;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --header-bg: #ffffff;
+
+  --danger: #dc2626;
+
+  --font-display: 'VT323', 'Inter', monospace;
+
+  --cat-poesia-bg: #fda4af;   --cat-poesia-fg: #881337;
+  --cat-novela-bg: #93c5fd;   --cat-novela-fg: #1e3a8a;
+  --cat-relato-bg: #86efac;   --cat-relato-fg: #14532d;
+  --cat-ensayo-bg: #d8b4fe;   --cat-ensayo-fg: #4c1d95;
+  --cat-teatro-bg: #fdba74;   --cat-teatro-fg: #7c2d12;
+  --cat-infantil-bg: #67e8f9; --cat-infantil-fg: #164e63;
+  --cat-otro-bg: #e5e7eb;     --cat-otro-fg: #374151;
+
+  --prize-dinero-bg: #fde047;      --prize-dinero-fg: #713f12;
+  --prize-publicacion-bg: #bfdbfe; --prize-publicacion-fg: #1e40af;
+  --prize-becas-bg: #e9d5ff;       --prize-becas-fg: #5b21b6;
+  --prize-reconocimiento-bg: #fda4af; --prize-reconocimiento-fg: #9f1239;
+  --prize-otro-bg: #e5e7eb;        --prize-otro-fg: #374151;
+
+  --badge-soon-bg: #fde047;   --badge-soon-fg: #713f12;
+  --badge-passed-bg: #e5e7eb; --badge-passed-fg: #6b7280;
+}
+
+// ── Base ───────────────────────────────────────────────────
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: var(--bg-page);
+  min-height: 100vh;
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+a {
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
