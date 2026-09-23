@@ -123,3 +123,10 @@ export class DataService {
 4. **CSS Variables theming** - Temas definidos en `:root` y `[data-theme="..."]` en `styles.scss`
 5. **CORS Proxies** - Cascada de 4 proxies en `rss.service.ts:CORS_PROXIES`
 6. **SEO requiere prerendering** - `SEO_PLAN.md` prevé SSG + RSS en build-time (`scripts/build-rss-data.ts` → `src/assets/rss-data.json`); esto afecta a `rss.service.ts` (debe leer JSON estático en browser, no fetch runtime)
+7. **Iconos: usar exclusivamente Lucide** - Todos los iconos SVG inline del proyecto (título, favicon, UI, estados, tags) provienen de [Lucide](https://lucide.dev) (licencia ISC, sin atribución obligatoria; hay crédito voluntario en el footer). **Convención:**
+   - Copiar el path desde [lucide.dev/icons](https://lucide.dev/icons) o `github.com/lucide-icons/lucide/main/icons/<nombre>.svg`
+   - Formato inline: `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">` + paths de Lucide (sin `width`/`height`, sin `stroke`/`fill` en el `<svg>` — hereda de CSS `.icon { fill: none; stroke: currentColor; ... }`)
+   - `aria-hidden="true"` en iconos decorativos
+   - El favicon (`src/assets/favicon.svg` + `src/favicon.ico`) usa el glifo `book` de Lucide sobre badge `#4f46e5`; si se cambia, regenerar `.ico` (resvg + png-to-ico)
+   - **No usar Flaticon, Font Awesome ni otras fuentes** — mantener consistencia visual con Lucide
+   - Al añadir un icono nuevo, verificar que el path coincida con la versión actual de Lucide (los paths antiguos de versiones previas no deben reutilizarse)

@@ -16,6 +16,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Changed
 
+- Iconos de UI unificados con Lucide: favicon con el glifo `book` del título, paths de iconos inline actualizados a la versión actual de Lucide y crédito voluntario en el footer.
 - Botón `Limpiar filtros` reubicado debajo de la fila de filtros (no en línea) para mejor jerarquía.
 - Paleta de los 4 temas revisada para accesibilidad AA y mayor viveza: `modern` más claro con glass 16px y radio 20, `wonderful` como Mr. Wonderful kraft `#fdf6e3` con `Caveat` manuscrita, `retro` 100% brutalist en amarillo realista `#fffbeb`, y `scifi` con grid cian sutil; fondos `cat`/`prize` más saturados por tema.
 - Badge `¡Pronto!` sin animación y con color único por tema (sólido `#991b1b`/`#be123c`/`#000`/`#22d3ee` neón en `scifi`) distinto de `poesía` y `dinero`; `Cierre:` en `#0f172a`/`#4a044e`/`#000` visible y neón en `scifi`.
