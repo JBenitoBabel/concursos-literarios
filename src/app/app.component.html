@@ -140,13 +140,15 @@
             }
           </select>
         </div>
+      </div>
 
-        <div class="filter-group filter-actions" *ngIf="hasActiveFilters()">
+      @if (hasActiveFilters()) {
+        <div class="filter-actions-below" data-testid="clear-filters-below">
           <button class="btn btn-clear" (click)="clearFilters()" aria-label="Limpiar todos los filtros" data-testid="clear-filters">
             Limpiar filtros
           </button>
         </div>
-      </div>
+      }
 
       <div class="results-count">
         {{ filteredContests().length }} concurso{{ filteredContests().length !== 1 ? 's' : '' }} encontrado{{ filteredContests().length !== 1 ? 's' : '' }}
