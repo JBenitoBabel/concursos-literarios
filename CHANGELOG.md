@@ -16,6 +16,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Changed
 
+- Cabecera reorganizada: selector de temas a la derecha del título, encima de la fecha de actualización, y oculto al hacer scroll para reducir altura.
 - La fecha del formato `BASES` se interpreta como fecha de cierre y se muestra como "Cierre:" en la tarjeta; los badges "¡Pronto!" y "Cerrado" se reactivan.
 - Orden por defecto del listado: "Cierre más próximo primero"; etiquetas de orden y filtro de mes renombradas a cierre.
 - Se eliminan de la tarjeta la descripción redundante (formato `dd:mm:yyyy`), las filas "Organizador" y "Género" y el meta "Publicado" (el RSS real no incluye `pubDate`).
@@ -23,6 +24,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Fixed
 
+- Parpadeo de la cabecera al quedar en el límite entre estado normal y colapsado; sustituido el `scroll` con umbral único por `IntersectionObserver` con histéresis 40/80 y colapso suave de subtítulo y selector.
 - Filtrado por mes mostraba solo septiembre porque el RSS no incluye `<pubDate>` por item.
 - La fecha `BASES` del RSS se mostraba como "Inicio" cuando en realidad es la fecha de cierre de la convocatoria.
 

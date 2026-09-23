@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RssService } from './services/rss.service';
@@ -16,7 +16,7 @@ const THEME_STORAGE_KEY = 'concursos-theme';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private rssService = inject(RssService);
 
   contests = signal<Contest[]>([]);
@@ -36,6 +36,9 @@ export class AppComponent implements OnInit {
   });
 
   scrolled = signal(false);
+
+  @ViewChild('headerSentinel', { static: false }) headerSentinel?: ElementRef<HTMLElement>;
+  private headerObserver?: IntersectionObserver;
 
   theme = signal<ThemeId>('modern');
 
@@ -88,6 +91,39 @@ export class AppComponent implements OnInit {
     this.loadContests();
   }
 
+  ngAfterViewInit() {
+    // Fallback inicial por si el observer no dispara (ej. refresh con scroll)
+    this.syncScrolledFromPosition();
+    this.setupHeaderObserver(!this.scrolled());
+  }
+
+  ngOnDestroy() {
+    this.headerObserver?.disconnect();
+  }
+
+  private syncScrolledFromPosition() {
+    const y = window.scrollY;
+    if (!this.scrolled() && y > 80) this.scrolled.set(true);
+    else if (this.scrolled() && y < 40) this.scrolled.set(false);
+  }
+
+  private setupHeaderObserver(forEnter: boolean) {
+    const sentinel = this.headerSentinel?.nativeElement;
+    if (!sentinel) return;
+    this.headerObserver?.disconnect();
+    sentinel.style.top = forEnter ? '80px' : '40px';
+    this.headerObserver = new IntersectionObserver(([entry]) => {
+      if (forEnter && !entry.isIntersecting) {
+        this.scrolled.set(true);
+        this.setupHeaderObserver(false);
+      } else if (!forEnter && entry.isIntersecting) {
+        this.scrolled.set(false);
+        this.setupHeaderObserver(true);
+      }
+    }, { root: null, rootMargin: '0px', threshold: 0 });
+    this.headerObserver.observe(sentinel);
+  }
+
   setTheme(id: ThemeId) {
     this.theme.set(id);
     document.documentElement.setAttribute('data-theme', id);
@@ -108,11 +144,6 @@ export class AppComponent implements OnInit {
     } catch {
       // localStorage no disponible
     }
-  }
-
-  @HostListener('window:scroll')
-  onWindowScroll() {
-    this.scrolled.set(window.scrollY > 80);
   }
 
   scrollToTop() {
