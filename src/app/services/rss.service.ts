@@ -141,6 +141,7 @@ export class RssService {
       categories: parsed.categories,
       prizeTypes: parsed.prizeTypes,
       deadline: parsed.deadline,
+      startDate: parsed.startDate,
       organizer: parsed.organizer,
       amount: parsed.amount,
       genre: parsed.genre,
@@ -173,6 +174,7 @@ export class RssService {
       categories: parsed.categories.length > 0 ? parsed.categories : categories.length > 0 ? categories : ['otro'],
       prizeTypes: parsed.prizeTypes,
       deadline: parsed.deadline,
+      startDate: parsed.startDate,
       organizer: parsed.organizer,
       amount: parsed.amount,
       genre: parsed.genre,
@@ -202,6 +204,7 @@ export class RssService {
     const categories = this.extractCategories(text);
     const prizeTypes = this.extractPrizeTypes(text);
     const deadline = this.extractDeadline(text);
+    const startDate = this.extractStartDate(text);
     const organizer = this.extractOrganizer(text);
     const amount = this.extractAmount(text);
     const genre = this.extractGenre(text);
@@ -211,6 +214,7 @@ export class RssService {
       categories,
       prizeTypes,
       deadline,
+      startDate,
       organizer,
       amount,
       genre,
@@ -287,7 +291,7 @@ export class RssService {
 
   private extractDeadline(text: string): Date | undefined {
     const patterns = [
-      /(?:plazo|fecha límite|fecha limite|deadline|hasta el|antes del)[:\s]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i,
+      /(?:plazo|fecha l[ií]mite|fecha limite|deadline|hasta el|antes del)[:\s]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i,
       /(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/g
     ];
 
@@ -304,6 +308,17 @@ export class RssService {
       }
     }
 
+    return undefined;
+  }
+
+  private extractStartDate(text: string): Date | undefined {
+    // Extract from BASES format: "BASES - (DD:MM:YYYY / DD:MM:YYYY)" - first date is start
+    const basesMatch = text.match(/BASES\s*-\s*\((\d{2}:\d{2}:\d{4})/);
+    if (basesMatch) {
+      const [day, month, year] = basesMatch[1].split(':').map(Number);
+      const date = new Date(year, month - 1, day);
+      if (!isNaN(date.getTime())) return date;
+    }
     return undefined;
   }
 

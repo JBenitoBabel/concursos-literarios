@@ -31,6 +31,10 @@ export class AppComponent implements OnInit {
   selectedMonths = signal<FilterMonth[]>([]);
   sortOrder = signal<SortOrder>('newest');
 
+  hasContestsWithoutDate = computed(() => {
+    return this.contests().some(c => !c.deadline && !c.startDate);
+  });
+
   scrolled = signal(false);
 
   theme = signal<ThemeId>('modern');
@@ -68,8 +72,11 @@ export class AppComponent implements OnInit {
   availableMonths = computed(() => {
     const months = new Set<string>();
     this.contests().forEach(c => {
-      const m = c.pubDate.toISOString().substring(0, 7);
-      months.add(m);
+      const date = c.deadline || c.startDate;
+      if (date) {
+        const m = date.toISOString().substring(0, 7);
+        months.add(m);
+      }
     });
     return Array.from(months).sort((a, b) => b.localeCompare(a)).map(m => ({
       value: m,
@@ -157,11 +164,25 @@ export class AppComponent implements OnInit {
 
     const months = this.selectedMonths();
     if (months.length > 0) {
-      result = result.filter(c => months.includes(c.pubDate.toISOString().substring(0, 7) as FilterMonth));
+      const hasNoDateFilter = months.includes('no-date');
+      const monthFilters = months.filter(m => m !== 'no-date');
+      
+      result = result.filter(c => {
+        const date = c.deadline || c.startDate;
+        if (!date) {
+          return hasNoDateFilter;
+        }
+        if (monthFilters.length === 0) {
+          return hasNoDateFilter;
+        }
+        return monthFilters.includes(date.toISOString().substring(0, 7) as FilterMonth);
+      });
     }
 
     result.sort((a, b) => {
-      const diff = a.pubDate.getTime() - b.pubDate.getTime();
+      const dateA = a.deadline || a.startDate || a.pubDate;
+      const dateB = b.deadline || b.startDate || b.pubDate;
+      const diff = dateA.getTime() - dateB.getTime();
       return this.sortOrder() === 'newest' ? -diff : diff;
     });
 

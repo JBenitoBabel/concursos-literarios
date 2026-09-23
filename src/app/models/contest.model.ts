@@ -6,6 +6,7 @@ export interface Contest {
   categories: string[];
   prizeTypes: string[];
   deadline?: Date;
+  startDate?: Date;
   organizer?: string;
   amount?: string;
   genre?: string[];
@@ -14,5 +15,5 @@ export interface Contest {
 
 export type FilterCategory = 'all' | 'poesia' | 'novela' | 'relato' | 'ensayo' | 'teatro' | 'infantil' | 'otro';
 export type FilterPrizeType = 'all' | 'dinero' | 'publicacion' | 'becas' | 'reconocimiento' | 'otro';
-export type FilterMonth = 'all' | string; // YYYY-MM format
+export type FilterMonth = 'all' | 'no-date' | string; // YYYY-MM format
 export type SortOrder = 'newest' | 'oldest';

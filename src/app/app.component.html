@@ -110,6 +110,20 @@
                 <span>{{ m.label }}</span>
               </label>
             }
+            @if (hasContestsWithoutDate()) {
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  [checked]="selectedMonths().includes('no-date')"
+                  (change)="toggleMonth('no-date')"
+                  aria-label="Concursos sin fecha"
+                  data-testid="checkbox-no-date">
+                <span class="checkbox-custom">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                </span>
+                <span>Sin fecha</span>
+              </label>
+            }
           </div>
         </div>
 
@@ -179,10 +193,12 @@
                     </a>
                   </h3>
                   <div class="card-meta">
-                    <span class="meta-item meta-date" title="Fecha de publicación">
-                      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
-                      {{ formatDate(contest.pubDate) }}
-                    </span>
+                    @if (contest.startDate) {
+                      <span class="meta-item meta-start-date" title="Fecha de inicio">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        Inicio: {{ formatDate(contest.startDate) }}
+                      </span>
+                    }
                     @if (contest.deadline) {
                       <span class="meta-item meta-deadline" [class.soon]="isDeadlineSoon(contest.deadline)" [class.passed]="isDeadlinePassed(contest.deadline)" title="Fecha límite">
                         @if (isDeadlinePassed(contest.deadline)) {
@@ -190,12 +206,17 @@
                         } @else {
                           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>
                         }
-                        {{ formatDate(contest.deadline) }}
+                        Límite: {{ formatDate(contest.deadline) }}
                         @if (isDeadlineSoon(contest.deadline)) {
                           <span class="urgent-badge">¡Pronto!</span>
                         } @else if (isDeadlinePassed(contest.deadline)) {
                           <span class="passed-badge">Cerrado</span>
                         }
+                      </span>
+                    } @else if (!contest.startDate) {
+                      <span class="meta-item meta-date" title="Fecha de publicación en la web">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        Publicado: {{ formatDate(contest.pubDate) }}
                       </span>
                     }
                   </div>

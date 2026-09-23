@@ -10,10 +10,18 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 ### Added
 
 - Favicon de libro en SVG (`src/assets/favicon.svg`) con enlace desde `index.html` e ICO actualizado.
+- Campo `startDate` en modelo `Contest` para fecha de inicio del concurso.
+- Filtro "Sin fecha" en selector de mes para concursos sin fecha parseable.
+- Visualización de "Inicio" y "Límite" en tarjetas de concurso.
 
 ### Changed
 
+- Filtro por mes y ordenamiento usan `deadline` → `startDate` en vez de `pubDate` (fecha publicación RSS).
+- Parsing RSS extrae fecha inicio desde formato `BASES - (DD:MM:YYYY)`.
+
 ### Fixed
+
+- Filtrado por mes mostraba solo septiembre porque el RSS no incluye `<pubDate>` por item.
 
 ## [0.1.0] - 2026-09-22
 
