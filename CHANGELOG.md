@@ -12,6 +12,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 - Favicon de libro en SVG (`src/assets/favicon.svg`) con enlace desde `index.html` e ICO actualizado.
 - Filtro "Sin fecha" en selector de mes para concursos sin fecha parseable.
 - Campos `openTo` y `country` en el modelo `Contest`, con fila "Abierto a:" y badge de país en la tarjeta.
+- Scrollbars tematizados (ventana y filtros) con variables CSS por tema y ajustes específicos para retro y sci-fi.
 
 ### Changed
 

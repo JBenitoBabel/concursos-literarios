@@ -57,6 +57,12 @@
 
   --badge-soon-bg: #fef3c7; --badge-soon-fg: #b45309;
   --badge-passed-bg: #f1f5f9; --badge-passed-fg: #64748b;
+
+  --scrollbar-track: var(--bg-subtle);
+  --scrollbar-thumb: var(--border-strong);
+  --scrollbar-thumb-hover: var(--accent);
+  --scrollbar-width: thin;
+  --scrollbar-radius: var(--radius-sm);
 }
 
 // ── Theme: Sci-Fi ──────────────────────────────────────────
@@ -115,6 +121,12 @@
 
   --badge-soon-bg: rgb(250 204 21 / 0.15); --badge-soon-fg: #facc15;
   --badge-passed-bg: rgb(100 116 139 / 0.2); --badge-passed-fg: #94a3b8;
+
+  --scrollbar-track: #0f172a;
+  --scrollbar-thumb: #334155;
+  --scrollbar-thumb-hover: #22d3ee;
+  --scrollbar-width: thin;
+  --scrollbar-radius: 6px;
 }
 
 // ── Theme: Wonderful ───────────────────────────────────────
@@ -173,6 +185,12 @@
 
   --badge-soon-bg: #fef3c7;   --badge-soon-fg: #b45309;
   --badge-passed-bg: #f1f5f9; --badge-passed-fg: #7c3aed;
+
+  --scrollbar-track: #f5f3ff;
+  --scrollbar-thumb: #e9d5ff;
+  --scrollbar-thumb-hover: #ec4899;
+  --scrollbar-width: thin;
+  --scrollbar-radius: 10px;
 }
 
 // ── Theme: Retro / 90s ─────────────────────────────────────
@@ -231,6 +249,12 @@
 
   --badge-soon-bg: #fde047;   --badge-soon-fg: #713f12;
   --badge-passed-bg: #e5e7eb; --badge-passed-fg: #6b7280;
+
+  --scrollbar-track: #fef9c3;
+  --scrollbar-thumb: #000000;
+  --scrollbar-thumb-hover: #ec4899;
+  --scrollbar-width: auto;
+  --scrollbar-radius: 0;
 }
 
 // ── Base ───────────────────────────────────────────────────
@@ -252,6 +276,68 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+// ── Scrollbars (ventana + filtros, tematizadas) ────────────
+html {
+  scrollbar-width: var(--scrollbar-width);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-gutter: stable;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-radius);
+  border: 2px solid var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
+}
+
+// Scroll interno de filtros (checkbox-group)
+.checkbox-group {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.checkbox-group::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+// Retro: grueso y cuadrado
+[data-theme='retro'] {
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+[data-theme='retro']::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+[data-theme='retro']::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  border: 1.5px solid #000;
+}
+
+// Sci-Fi: glow sutil en thumb
+[data-theme='scifi']::-webkit-scrollbar-thumb {
+  box-shadow: 0 0 8px var(--accent-shadow);
 }
 
 a {
