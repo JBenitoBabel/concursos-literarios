@@ -113,6 +113,61 @@ describe('RSS Parser - Pure Logic Tests', () => {
       const result = logic.extractDeadline(text) as Date | undefined;
       expect(result).toBeUndefined();
     });
+
+    it('should parse single colon date from real RSS BASES format as deadline', () => {
+      const text = 'BASES - (01:10:2026 / Teatro / 6.000 euros / Abierto a: sin restricciones)';
+      const result = logic.extractDeadline(text) as Date | undefined;
+      expect(result).toEqual(new Date(2026, 9, 1));
+    });
+
+    it('should take the LAST colon date when BASES has two dates', () => {
+      const text = 'BASES - (15:03:2024 / 30:04:2024). Premio en metálico.';
+      const result = logic.extractDeadline(text) as Date | undefined;
+      expect(result).toEqual(new Date(2024, 3, 30));
+    });
+
+    it('should keep past BASES dates so the UI can show "Cerrado"', () => {
+      const text = 'BASES - (01:01:2020 / Teatro / 300 euros / Abierto a: sin restricciones)';
+      const result = logic.extractDeadline(text) as Date | undefined;
+      expect(result).toEqual(new Date(2020, 0, 1));
+    });
+  });
+
+  describe('extractOpenTo', () => {
+    it('should extract "sin restricciones" closing at parenthesis', () => {
+      const text = 'BASES - (01:10:2026 / Teatro / 6.000 euros / Abierto a: sin restricciones)';
+      const result = logic.extractOpenTo(text) as string | undefined;
+      expect(result).toBe('sin restricciones');
+    });
+
+    it('should extract free text and collapse whitespace', () => {
+      const text = 'BASES - (25:09:2026 / Premio / Abierto a:  mayores   de edad\nresidentes en España)';
+      const result = logic.extractOpenTo(text) as string | undefined;
+      expect(result).toBe('mayores de edad');
+    });
+
+    it('should return undefined when "Abierto a" is missing', () => {
+      const text = 'BASES - (01:10:2026 / Teatro / 6.000 euros)';
+      const result = logic.extractOpenTo(text) as string | undefined;
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('extractCountry', () => {
+    it('should extract trailing "(España)" from title', () => {
+      const result = logic.extractCountry('XXII CERTAMEN DE TEATRO 2026 (España)') as string | undefined;
+      expect(result).toBe('España');
+    });
+
+    it('should extract trailing "(Argentina)" from title', () => {
+      const result = logic.extractCountry('PREMIO MARÍA ELENA WALSH (Argentina)') as string | undefined;
+      expect(result).toBe('Argentina');
+    });
+
+    it('should return undefined when title has no trailing parentheses', () => {
+      const result = logic.extractCountry('Concurso sin país en el título') as string | undefined;
+      expect(result).toBeUndefined();
+    });
   });
 
   describe('parseDate', () => {

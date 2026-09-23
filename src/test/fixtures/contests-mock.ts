@@ -11,7 +11,6 @@ export const mockContests: Contest[] = [
     deadline: new Date('2024-04-30'),
     organizer: 'Editorial Destino',
     amount: '18.000 €',
-    genre: [],
     rawDescription: 'BASES - (15:03:2024 / 30:04:2024). Premio en metálico de 18.000 € y publicación. Convoca Editorial Destino. Novela.'
   },
   {
@@ -24,7 +23,6 @@ export const mockContests: Contest[] = [
     deadline: new Date('2024-05-15'),
     organizer: 'Ayuntamiento de Madrid',
     amount: '3.000 €',
-    genre: [],
     rawDescription: 'BASES - (01:02:2024 / 15:05:2024). Premio: 3.000 €. Poesía. Convoca Ayuntamiento de Madrid.'
   },
   {
@@ -37,7 +35,6 @@ export const mockContests: Contest[] = [
     deadline: new Date('2024-06-30'),
     organizer: 'Fundación Cultural',
     amount: undefined,
-    genre: [],
     rawDescription: 'BASES - (10:04:2024 / 30:06:2024). Beca de residencia. Relato y Narrativa breve. Organiza Fundación Cultural.'
   },
   {
@@ -50,7 +47,6 @@ export const mockContests: Contest[] = [
     deadline: undefined,
     organizer: undefined,
     amount: undefined,
-    genre: ['teatro'],
     rawDescription: 'Solo reconocimiento. Teatro.'
   }
 ];
