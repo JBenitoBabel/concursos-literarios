@@ -90,7 +90,6 @@ npm run build
         "@type": "Event",
         "name": "Premio Nadal 2024",
         "url": "https://...",
-        "startDate": "2024-01-15",
         "endDate": "2024-03-31",
         "organizer": {"@type": "Organization", "name": "Editorial Destino"},
         "offers": {"@type": "Offer", "price": "18000", "priceCurrency": "EUR"}

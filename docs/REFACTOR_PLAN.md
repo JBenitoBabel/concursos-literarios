@@ -17,7 +17,7 @@ La aplicación es **Angular 17+ standalone** con signals, SSR-ready, CSS variabl
 | Archivo | Líneas | Responsabilidades mezcladas | Severidad |
 |---------|--------|----------------------------|-----------|
 | `app.component.ts` | 282 | UI, estado global, filtros, tema, scroll, labels, formateo fechas, tracking | **Alta** |
-| `rss.service.ts` | 367 | HTTP + retry proxies, parsing XML, parsing Jina markdown, extracción categorías (combinadas + simples), extracción prizeTypes, deadline, organizador, amount, genre, limpieza descripción | **Alta** |
+| `rss.service.ts` | 367 | HTTP + retry proxies, parsing XML, parsing Jina markdown, extracción categorías (combinadas + simples), extracción prizeTypes, deadline (fecha cierre BASES), organizador, amount, openTo, country, limpieza descripción | **Alta** |
 
 **Refactor propuesto:**
 - `ContestStoreService` / `ContestFilterService` → estado + filtros + computed

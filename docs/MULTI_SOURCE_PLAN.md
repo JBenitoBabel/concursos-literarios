@@ -73,7 +73,8 @@ export interface Contest {
   deadline?: Date;
   organizer?: string;
   amount?: string;
-  genre?: string[];
+  openTo?: string;
+  country?: string;
   rawDescription: string;
   source?: ContestSource;   // nuevo — opcional para no romper nada
 }
@@ -122,6 +123,7 @@ Solo se usan para los 3 RSS; el JSON de GitHub se puede pedir directo.
 ### 1. escritores.org — actual (mantener)
 
 - XML RSS + fallback Jina markdown (`BASES - (dd:mm:yyyy / …)`).
+- La fecha `BASES` es el **cierre** (si hay dos, la última); `openTo` sale de `Abierto a:`; `country` del sufijo `(País)` del título.
 - Sin cambios de lógica, solo etiquetar `source: 'escritores'`.
 
 ### 2. Letralia (RSS WordPress)
@@ -163,6 +165,7 @@ Filtrar categorías no literarias si hace falta (`Concursos de periodismo`, `fot
   organizer: item.organizacion !== 'No especificada' ? item.organizacion : undefined,
   amount: item.premio,
   categories: mapCategoria(item.categoria),  // 'Poesia' → 'poesia', etc.
+  country: item.pais,
   pubDate: new Date(),  // el JSON no tiene fecha de publicación
   source: 'letrasespanolas',
   rawDescription: item.descripcion,
