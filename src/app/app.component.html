@@ -191,7 +191,10 @@
                       {{ getDisplayTitle(contest) }}
                     </a>
                     @if (contest.country) {
-                      <span class="tag tag-country" title="País de la entidad convocante">{{ contest.country }}</span>
+                      <span class="tag tag-country" title="País de la entidad convocante">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        {{ contest.country }}
+                      </span>
                     }
                   </h3>
                   <div class="card-meta">
@@ -215,33 +218,37 @@
 
                 <div class="card-body">
                   <div class="card-tags">
-                    @for (cat of contest.categories; track cat) {
-                      <span class="tag tag-category {{ getCategoryClass(cat) }}">
-                        {{ getCategoryLabel(cat) }}
-                      </span>
-                    }
-                    @for (pt of contest.prizeTypes; track pt) {
-                      <span class="tag tag-prize prize-{{ pt }}">
-                        @switch (pt) {
-                          @case ('dinero') {
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                    <div class="card-tags-row card-tags-categories" role="list" aria-label="Categorías">
+                      @for (cat of contest.categories; track cat) {
+                        <span class="tag tag-category {{ getCategoryClass(cat) }}" role="listitem">
+                          {{ getCategoryLabel(cat) }}
+                        </span>
+                      }
+                    </div>
+                    <div class="card-tags-row card-tags-prizes" role="list" aria-label="Premios">
+                      @for (pt of contest.prizeTypes; track pt) {
+                        <span class="tag tag-prize prize-{{ pt }}" role="listitem">
+                          @switch (pt) {
+                            @case ('dinero') {
+                              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            }
+                            @case ('publicacion') {
+                              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                            }
+                            @case ('becas') {
+                              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
+                            }
+                            @case ('reconocimiento') {
+                              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                            }
+                            @default {
+                              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                            }
                           }
-                          @case ('publicacion') {
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-                          }
-                          @case ('becas') {
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>
-                          }
-                          @case ('reconocimiento') {
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-                          }
-                          @default {
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-                          }
-                        }
-                        {{ getPrizeTypeLabel(pt) }}
-                      </span>
-                    }
+                          {{ getPrizeTypeLabel(pt) }}
+                        </span>
+                      }
+                    </div>
                   </div>
 
                   @if (contest.amount || contest.openTo) {

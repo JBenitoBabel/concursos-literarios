@@ -16,6 +16,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Changed
 
+- Badges diferenciados por familia: país como rectángulo ghost 4px con icono `map-pin` en la cabecera de la tarjeta, categorías como pill con dot y premios como rectángulo 6px con icono y borde `color-mix`; filas separadas para categorías y premios con variables `--badge-country-*` por tema.
 - Cabecera reorganizada: selector de temas a la derecha del título, encima de la fecha de actualización, y oculto al hacer scroll para reducir altura.
 - La fecha del formato `BASES` se interpreta como fecha de cierre y se muestra como "Cierre:" en la tarjeta; los badges "¡Pronto!" y "Cerrado" se reactivan.
 - Orden por defecto del listado: "Cierre más próximo primero"; etiquetas de orden y filtro de mes renombradas a cierre.

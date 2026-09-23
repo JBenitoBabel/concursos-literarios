@@ -484,6 +484,10 @@ $transition: all 0.2s ease;
   font-size: 1.0625rem;
   font-weight: 600;
   line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .title-link {
@@ -563,9 +567,25 @@ $transition: all 0.2s ease;
 
 .card-tags {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
+}
+
+.card-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+
+  &.card-tags-categories {
+    // fila superior: categorías
+  }
+
+  &.card-tags-prizes {
+    // fila inferior: recompensas (ligeramente separada)
+    padding-top: 0.125rem;
+  }
 }
 
 // ── Pills ──────────────────────────────────────────────────
@@ -588,6 +608,22 @@ $transition: all 0.2s ease;
   }
 
   &.tag-category {
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    position: relative;
+    padding-left: 0.625rem;
+
+    &::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
     &.cat-poesia { background: var(--cat-poesia-bg); color: var(--cat-poesia-fg); }
     &.cat-novela { background: var(--cat-novela-bg); color: var(--cat-novela-fg); }
     &.cat-relato { background: var(--cat-relato-bg); color: var(--cat-relato-fg); }
@@ -598,22 +634,47 @@ $transition: all 0.2s ease;
   }
 
   &.tag-prize {
-    &.prize-dinero { background: var(--prize-dinero-bg); color: var(--prize-dinero-fg); }
-    &.prize-publicacion { background: var(--prize-publicacion-bg); color: var(--prize-publicacion-fg); }
-    &.prize-becas { background: var(--prize-becas-bg); color: var(--prize-becas-fg); }
-    &.prize-reconocimiento { background: var(--prize-reconocimiento-bg); color: var(--prize-reconocimiento-fg); }
-    &.prize-otro { background: var(--prize-otro-bg); color: var(--prize-otro-fg); }
+    border-radius: var(--radius-sm);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 600;
+    border: 1px solid transparent;
+    padding: 0.22rem 0.6rem;
+
+    .icon {
+      width: 12px;
+      height: 12px;
+      opacity: 0.9;
+    }
+
+    &.prize-dinero { background: var(--prize-dinero-bg); color: var(--prize-dinero-fg); border-color: color-mix(in srgb, var(--prize-dinero-fg) 22%, transparent); }
+    &.prize-publicacion { background: var(--prize-publicacion-bg); color: var(--prize-publicacion-fg); border-color: color-mix(in srgb, var(--prize-publicacion-fg) 22%, transparent); }
+    &.prize-becas { background: var(--prize-becas-bg); color: var(--prize-becas-fg); border-color: color-mix(in srgb, var(--prize-becas-fg) 22%, transparent); }
+    &.prize-reconocimiento { background: var(--prize-reconocimiento-bg); color: var(--prize-reconocimiento-fg); border-color: color-mix(in srgb, var(--prize-reconocimiento-fg) 22%, transparent); }
+    &.prize-otro { background: var(--prize-otro-bg); color: var(--prize-otro-fg); border-color: color-mix(in srgb, var(--prize-otro-fg) 18%, transparent); }
   }
 
   &.tag-country {
-    background: transparent;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
+    background: var(--badge-country-bg);
+    color: var(--badge-country-fg);
+    border: 1px solid var(--badge-country-border);
+    border-radius: var(--radius-sm);
     vertical-align: middle;
-    margin-left: 0.5rem;
-    text-transform: none;
-    letter-spacing: 0;
+    margin-left: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     font-weight: 500;
+    font-size: 0.65rem;
+    padding: 0.18rem 0.5rem;
+    gap: 0.25rem;
+    line-height: 1.3;
+
+    .icon {
+      width: 10px;
+      height: 10px;
+      stroke-width: 2.2;
+      opacity: 0.85;
+    }
   }
 }
 
@@ -924,6 +985,23 @@ $transition: all 0.2s ease;
 
 [data-theme='retro'] .tag {
   border: 1.5px solid #000;
+}
+
+[data-theme='retro'] .tag-prize {
+  border: 1.5px solid #000;
+}
+
+[data-theme='retro'] .tag-country {
+  border: 1.5px dashed #000;
+  background: #fff;
+}
+
+[data-theme='scifi'] .tag-prize {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--prize-dinero-fg) 10%, transparent);
+}
+
+[data-theme='scifi'] .tag-country {
+  border-style: solid;
 }
 
 [data-theme='retro'] .theme-selector {
