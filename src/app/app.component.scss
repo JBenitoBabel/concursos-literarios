@@ -508,17 +508,6 @@ $transition: all 0.2s ease;
   flex-direction: column;
 }
 
-.card-description {
-  margin: 0 0 1rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.65;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 .card-tags {
   display: flex;
   flex-wrap: wrap;
@@ -562,6 +551,17 @@ $transition: all 0.2s ease;
     &.prize-reconocimiento { background: var(--prize-reconocimiento-bg); color: var(--prize-reconocimiento-fg); }
     &.prize-otro { background: var(--prize-otro-bg); color: var(--prize-otro-fg); }
   }
+
+  &.tag-country {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    vertical-align: middle;
+    margin-left: 0.5rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
 }
 
 .card-details {
@@ -589,6 +589,13 @@ $transition: all 0.2s ease;
   .detail-value {
     color: var(--text-secondary);
     font-weight: 500;
+
+    &.detail-open-to {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   }
 }
 
