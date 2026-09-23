@@ -29,10 +29,10 @@ export class AppComponent implements OnInit {
   selectedCategories = signal<FilterCategory[]>([]);
   selectedPrizeTypes = signal<FilterPrizeType[]>([]);
   selectedMonths = signal<FilterMonth[]>([]);
-  sortOrder = signal<SortOrder>('newest');
+  sortOrder = signal<SortOrder>('oldest');
 
   hasContestsWithoutDate = computed(() => {
-    return this.contests().some(c => !c.deadline && !c.startDate);
+    return this.contests().some(c => !c.deadline);
   });
 
   scrolled = signal(false);
@@ -65,16 +65,15 @@ export class AppComponent implements OnInit {
   ];
 
   sortOptions: { value: SortOrder; label: string }[] = [
-    { value: 'newest', label: 'Más recientes primero' },
-    { value: 'oldest', label: 'Más antiguos primero' }
+    { value: 'oldest', label: 'Cierre más próximo primero' },
+    { value: 'newest', label: 'Cierre más lejano primero' }
   ];
 
   availableMonths = computed(() => {
     const months = new Set<string>();
     this.contests().forEach(c => {
-      const date = c.deadline || c.startDate;
-      if (date) {
-        const m = date.toISOString().substring(0, 7);
+      if (c.deadline) {
+        const m = c.deadline.toISOString().substring(0, 7);
         months.add(m);
       }
     });
@@ -168,20 +167,19 @@ export class AppComponent implements OnInit {
       const monthFilters = months.filter(m => m !== 'no-date');
       
       result = result.filter(c => {
-        const date = c.deadline || c.startDate;
-        if (!date) {
+        if (!c.deadline) {
           return hasNoDateFilter;
         }
         if (monthFilters.length === 0) {
           return hasNoDateFilter;
         }
-        return monthFilters.includes(date.toISOString().substring(0, 7) as FilterMonth);
+        return monthFilters.includes(c.deadline.toISOString().substring(0, 7) as FilterMonth);
       });
     }
 
     result.sort((a, b) => {
-      const dateA = a.deadline || a.startDate || a.pubDate;
-      const dateB = b.deadline || b.startDate || b.pubDate;
+      const dateA = a.deadline || a.pubDate;
+      const dateB = b.deadline || b.pubDate;
       const diff = dateA.getTime() - dateB.getTime();
       return this.sortOrder() === 'newest' ? -diff : diff;
     });
@@ -225,7 +223,7 @@ export class AppComponent implements OnInit {
     this.selectedCategories.set([]);
     this.selectedPrizeTypes.set([]);
     this.selectedMonths.set([]);
-    this.sortOrder.set('newest');
+    this.sortOrder.set('oldest');
     this.applyFilters();
   }
 
@@ -271,6 +269,12 @@ export class AppComponent implements OnInit {
       'otro': 'Otro'
     };
     return labels[type] || type;
+  }
+
+  getDisplayTitle(contest: Contest): string {
+    return contest.country
+      ? contest.title.replace(/\s*\([^()]+\)\s*$/, '').trim()
+      : contest.title;
   }
 
   formatDate(date: Date | undefined): string {

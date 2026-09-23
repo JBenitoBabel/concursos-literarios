@@ -10,18 +10,20 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 ### Added
 
 - Favicon de libro en SVG (`src/assets/favicon.svg`) con enlace desde `index.html` e ICO actualizado.
-- Campo `startDate` en modelo `Contest` para fecha de inicio del concurso.
 - Filtro "Sin fecha" en selector de mes para concursos sin fecha parseable.
-- Visualización de "Inicio" y "Límite" en tarjetas de concurso.
+- Campos `openTo` y `country` en el modelo `Contest`, con fila "Abierto a:" y badge de país en la tarjeta.
 
 ### Changed
 
-- Filtro por mes y ordenamiento usan `deadline` → `startDate` en vez de `pubDate` (fecha publicación RSS).
-- Parsing RSS extrae fecha inicio desde formato `BASES - (DD:MM:YYYY)`.
+- La fecha del formato `BASES` se interpreta como fecha de cierre y se muestra como "Cierre:" en la tarjeta; los badges "¡Pronto!" y "Cerrado" se reactivan.
+- Orden por defecto del listado: "Cierre más próximo primero"; etiquetas de orden y filtro de mes renombradas a cierre.
+- Se eliminan de la tarjeta la descripción redundante (formato `dd:mm:yyyy`), las filas "Organizador" y "Género" y el meta "Publicado" (el RSS real no incluye `pubDate`).
+- El título se muestra sin el sufijo de país, ahora representado como badge.
 
 ### Fixed
 
 - Filtrado por mes mostraba solo septiembre porque el RSS no incluye `<pubDate>` por item.
+- La fecha `BASES` del RSS se mostraba como "Inicio" cuando en realidad es la fecha de cierre de la convocatoria.
 
 ## [0.1.0] - 2026-09-22
 

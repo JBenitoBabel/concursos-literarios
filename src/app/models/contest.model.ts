@@ -6,10 +6,10 @@ export interface Contest {
   categories: string[];
   prizeTypes: string[];
   deadline?: Date;
-  startDate?: Date;
   organizer?: string;
   amount?: string;
-  genre?: string[];
+  openTo?: string;
+  country?: string;
   rawDescription: string;
 }
 

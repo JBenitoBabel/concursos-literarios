@@ -115,16 +115,8 @@ export class RssService {
     const title = titleLinkMatch[1].trim();
     const link = titleLinkMatch[2].trim();
 
-    // Extract date from BASES line: "BASES - (25:09:2026 / ...)"
-    const basesMatch = entry.match(/BASES\s*-\s*\((\d{2}:\d{2}:\d{4})/);
-    let pubDate: Date;
-    if (basesMatch) {
-      const [day, month, year] = basesMatch[1].split(':').map(Number);
-      pubDate = new Date(year, month - 1, day);
-    } else {
-      const pubTimeMatch = entry.match(/Published Time:\s*([^\n]+)/);
-      pubDate = pubTimeMatch ? new Date(pubTimeMatch[1].trim()) : new Date();
-    }
+    const pubTimeMatch = entry.match(/Published Time:\s*([^\n]+)/);
+    const pubDate = pubTimeMatch ? new Date(pubTimeMatch[1].trim()) : new Date();
 
     // Extract content after "BASES - " or the main description
     const basesContentMatch = entry.match(/BASES\s*-\s*[^\n]+/);
@@ -141,10 +133,10 @@ export class RssService {
       categories: parsed.categories,
       prizeTypes: parsed.prizeTypes,
       deadline: parsed.deadline,
-      startDate: parsed.startDate,
       organizer: parsed.organizer,
       amount: parsed.amount,
-      genre: parsed.genre,
+      openTo: parsed.openTo,
+      country: this.extractCountry(title),
       rawDescription
     };
   }
@@ -174,10 +166,10 @@ export class RssService {
       categories: parsed.categories.length > 0 ? parsed.categories : categories.length > 0 ? categories : ['otro'],
       prizeTypes: parsed.prizeTypes,
       deadline: parsed.deadline,
-      startDate: parsed.startDate,
       organizer: parsed.organizer,
       amount: parsed.amount,
-      genre: parsed.genre,
+      openTo: parsed.openTo,
+      country: this.extractCountry(title),
       rawDescription
     };
   }
@@ -204,20 +196,18 @@ export class RssService {
     const categories = this.extractCategories(text);
     const prizeTypes = this.extractPrizeTypes(text);
     const deadline = this.extractDeadline(text);
-    const startDate = this.extractStartDate(text);
     const organizer = this.extractOrganizer(text);
     const amount = this.extractAmount(text);
-    const genre = this.extractGenre(text);
+    const openTo = this.extractOpenTo(text);
     const cleanDescription = this.cleanDescription(text);
 
     return {
       categories,
       prizeTypes,
       deadline,
-      startDate,
       organizer,
       amount,
-      genre,
+      openTo,
       cleanDescription
     };
   }
@@ -290,6 +280,17 @@ export class RssService {
   }
 
   private extractDeadline(text: string): Date | undefined {
+    const basesSection = text.match(/BASES\s*-\s*\(([^)]*)\)/i);
+    if (basesSection) {
+      const colonDates = basesSection[1].match(/\d{1,2}:\d{1,2}:\d{4}/g);
+      if (colonDates && colonDates.length > 0) {
+        const last = colonDates[colonDates.length - 1];
+        const [day, month, year] = last.split(':').map(Number);
+        const date = new Date(year, month - 1, day);
+        if (!isNaN(date.getTime())) return date;
+      }
+    }
+
     const patterns = [
       /(?:plazo|fecha l[ií]mite|fecha limite|deadline|hasta el|antes del)[:\s]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i,
       /(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/g
@@ -311,15 +312,16 @@ export class RssService {
     return undefined;
   }
 
-  private extractStartDate(text: string): Date | undefined {
-    // Extract from BASES format: "BASES - (DD:MM:YYYY / DD:MM:YYYY)" - first date is start
-    const basesMatch = text.match(/BASES\s*-\s*\((\d{2}:\d{2}:\d{4})/);
-    if (basesMatch) {
-      const [day, month, year] = basesMatch[1].split(':').map(Number);
-      const date = new Date(year, month - 1, day);
-      if (!isNaN(date.getTime())) return date;
-    }
-    return undefined;
+  private extractOpenTo(text: string): string | undefined {
+    const match = text.match(/Abierto a:\s*([^)\n]+)/i);
+    const value = match?.[1]?.trim();
+    return value ? value.replace(/\s+/g, ' ') : undefined;
+  }
+
+  private extractCountry(title: string): string | undefined {
+    const match = title.trim().match(/\(([^()]+)\)\s*$/);
+    const value = match?.[1]?.trim();
+    return value || undefined;
   }
 
   private parseDate(str: string): Date | null {
@@ -351,25 +353,6 @@ export class RssService {
   private extractAmount(text: string): string | undefined {
     const match = text.match(/(\d+(?:[.,]\d{3})*(?:[.,]\d{2})?\s*(?:€|euros|eur|dólares|dolares|\$))/i);
     return match ? match[1] : undefined;
-  }
-
-  private extractGenre(text: string): string[] {
-    const genres: string[] = [];
-    const lowerText = text.toLowerCase();
-
-    const genreKeywords = [
-      'fantasía', 'fantasia', 'ciencia ficción', 'ciencia ficcion', 'terror', 'misterio',
-      'romántica', 'romantica', 'histórica', 'historica', 'negra', 'policíaca', 'policiaca',
-      'humor', 'realismo', 'experimental', 'lírica', 'lorica', 'épica', 'epica'
-    ];
-
-    for (const genre of genreKeywords) {
-      if (lowerText.includes(genre)) {
-        genres.push(genre);
-      }
-    }
-
-    return genres;
   }
 
   private cleanDescription(text: string): string {
