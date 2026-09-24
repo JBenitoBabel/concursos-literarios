@@ -25,8 +25,8 @@
             </button>
           }
         </div>
-        <div class="last-updated" *ngIf="lastUpdated()">
-          Actualizado: {{ lastUpdated() | date:'dd/MM/yyyy HH:mm' }}
+        <div class="last-updated" *ngIf="store.lastUpdated()">
+          Actualizado: {{ store.lastUpdated() | date:'dd/MM/yyyy HH:mm' }}
         </div>
       </div>
     </div>
@@ -44,8 +44,8 @@
           type="search"
           class="search-input"
           placeholder="Buscar por título, categoría, premio..."
-          [value]="searchTerm()"
-          (input)="onSearchChange($any($event.target).value)"
+          [value]="store.searchTerm()"
+          (input)="store.setSearchTerm($any($event.target).value)"
           aria-describedby="search-hint"
           data-testid="search-input">
         <span id="search-hint" class="visually-hidden">Escribe para filtrar la lista en tiempo real</span>
@@ -59,8 +59,8 @@
               <label class="checkbox-item">
                 <input
                   type="checkbox"
-                  [checked]="selectedCategories().includes(cat.value)"
-                  (change)="toggleCategory(cat.value)"
+                  [checked]="store.selectedCategories().includes(cat.value)"
+                  (change)="store.toggleCategory(cat.value)"
                   [attr.aria-label]="cat.label"
                   [attr.data-testid]="'checkbox-' + cat.value">
                 <span class="checkbox-custom {{ getCategoryClass(cat.value) }}">
@@ -79,8 +79,8 @@
               <label class="checkbox-item">
                 <input
                   type="checkbox"
-                  [checked]="selectedPrizeTypes().includes(pt.value)"
-                  (change)="togglePrizeType(pt.value)"
+                  [checked]="store.selectedPrizeTypes().includes(pt.value)"
+                  (change)="store.togglePrizeType(pt.value)"
                   [attr.aria-label]="pt.label"
                   [attr.data-testid]="'checkbox-' + pt.value">
                 <span class="checkbox-custom">
@@ -95,12 +95,12 @@
         <div class="filter-group">
           <label class="filter-label">Mes de cierre</label>
           <div class="checkbox-group">
-            @for (m of availableMonths(); track m.value) {
+            @for (m of store.availableMonths(); track m.value) {
               <label class="checkbox-item">
                 <input
                   type="checkbox"
-                  [checked]="selectedMonths().includes(m.value)"
-                  (change)="toggleMonth(m.value)"
+                  [checked]="store.selectedMonths().includes(m.value)"
+                  (change)="store.toggleMonth(m.value)"
                   [attr.aria-label]="m.label"
                   [attr.data-testid]="'checkbox-' + m.value">
                 <span class="checkbox-custom">
@@ -109,12 +109,12 @@
                 <span>{{ m.label }}</span>
               </label>
             }
-            @if (hasContestsWithoutDate()) {
+            @if (store.hasContestsWithoutDate()) {
               <label class="checkbox-item">
                 <input
                   type="checkbox"
-                  [checked]="selectedMonths().includes('no-date')"
-                  (change)="toggleMonth('no-date')"
+                  [checked]="store.selectedMonths().includes('no-date')"
+                  (change)="store.toggleMonth('no-date')"
                   aria-label="Concursos sin fecha"
                   data-testid="checkbox-no-date">
                 <span class="checkbox-custom">
@@ -131,8 +131,8 @@
           <select
             id="sort-filter"
             class="filter-select"
-            [value]="sortOrder()"
-            (change)="onSortChange($any($event.target).value)"
+            [value]="store.sortOrder()"
+            (change)="store.setSortOrder($any($event.target).value)"
             aria-label="Ordenar concursos por"
             data-testid="sort-select">
             @for (s of sortOptions; track s.value) {
@@ -142,17 +142,17 @@
         </div>
       </div>
 
-      @if (hasActiveFilters()) {
+      @if (store.hasActiveFilters()) {
         <div class="filter-actions-below" data-testid="clear-filters-below">
-          <button class="btn btn-clear" (click)="clearFilters()" aria-label="Limpiar todos los filtros" data-testid="clear-filters">
+          <button class="btn btn-clear" (click)="store.clearFilters()" aria-label="Limpiar todos los filtros" data-testid="clear-filters">
             Limpiar filtros
           </button>
         </div>
       }
 
       <div class="results-count">
-        {{ filteredContests().length }} concurso{{ filteredContests().length !== 1 ? 's' : '' }} encontrado{{ filteredContests().length !== 1 ? 's' : '' }}
-        @if (hasActiveFilters()) {
+        {{ store.filteredContests().length }} concurso{{ store.filteredContests().length !== 1 ? 's' : '' }} encontrado{{ store.filteredContests().length !== 1 ? 's' : '' }}
+        @if (store.hasActiveFilters()) {
           <span class="filter-badge">(filtrado)</span>
         }
       </div>
@@ -161,30 +161,30 @@
     <section class="contests-section" aria-labelledby="contests-heading">
       <h2 id="contests-heading" class="visually-hidden">Listado de concursos</h2>
 
-      @if (loading()) {
+      @if (store.loading()) {
         <div class="loading-state" role="status" aria-live="polite">
           <div class="spinner" aria-hidden="true"></div>
           <p class="empty-message">Cargando concursos...</p>
         </div>
-      } @else if (error()) {
+      } @else if (store.error()) {
         <div class="error-state" role="alert">
           <span class="state-icon" aria-hidden="true">
             <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
           </span>
-          <p class="error-message">{{ error() }}</p>
-          <button class="btn btn-retry" (click)="loadContests()">Reintentar</button>
+          <p class="error-message">{{ store.error() }}</p>
+          <button class="btn btn-retry" (click)="store.loadContests()">Reintentar</button>
         </div>
-      } @else if (filteredContests().length === 0) {
+      } @else if (store.filteredContests().length === 0) {
         <div class="empty-state">
           <span class="state-icon" aria-hidden="true">
             <svg class="icon" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
           </span>
           <p class="empty-message">No se encontraron concursos con los filtros actuales.</p>
-          <button class="btn btn-clear" (click)="clearFilters()" data-testid="clear-filters">Limpiar filtros</button>
+          <button class="btn btn-clear" (click)="store.clearFilters()" data-testid="clear-filters">Limpiar filtros</button>
         </div>
       } @else {
         <ul class="contests-list" role="list">
-          @for (contest of filteredContests(); track trackByLink($index, contest)) {
+          @for (contest of store.filteredContests(); track store.trackByLink($index, contest)) {
             <li class="contest-card" data-testid="contest-card">
               <article class="card-content">
                 <header class="card-header">
