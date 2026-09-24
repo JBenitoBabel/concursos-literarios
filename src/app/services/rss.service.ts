@@ -2,6 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
 import { Contest } from '../models/contest.model';
+import { extractCategories } from '../data/extractors/category.extractor';
+import { extractPrizeTypes } from '../data/extractors/prize-type.extractor';
+import { extractDeadline } from '../data/extractors/deadline.extractor';
+import { extractOrganizer } from '../data/extractors/organizer.extractor';
+import { extractAmount } from '../data/extractors/amount.extractor';
+import { extractOpenTo } from '../data/extractors/open-to.extractor';
+import { extractCountry } from '../data/extractors/country.extractor';
+import { cleanDescription } from '../data/extractors/description-cleaner';
 
 @Injectable({
   providedIn: 'root'
@@ -136,7 +144,7 @@ export class RssService {
       organizer: parsed.organizer,
       amount: parsed.amount,
       openTo: parsed.openTo,
-      country: this.extractCountry(title),
+      country: extractCountry(title),
       rawDescription
     };
   }
@@ -169,7 +177,7 @@ export class RssService {
       organizer: parsed.organizer,
       amount: parsed.amount,
       openTo: parsed.openTo,
-      country: this.extractCountry(title),
+      country: extractCountry(title),
       rawDescription
     };
   }
@@ -193,13 +201,13 @@ export class RssService {
     const cleanHtml = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
     const text = cleanHtml;
 
-    const categories = this.extractCategories(text);
-    const prizeTypes = this.extractPrizeTypes(text);
-    const deadline = this.extractDeadline(text);
-    const organizer = this.extractOrganizer(text);
-    const amount = this.extractAmount(text);
-    const openTo = this.extractOpenTo(text);
-    const cleanDescription = this.cleanDescription(text);
+    const categories = extractCategories(text);
+    const prizeTypes = extractPrizeTypes(text);
+    const deadline = extractDeadline(text);
+    const organizer = extractOrganizer(text);
+    const amount = extractAmount(text);
+    const openTo = extractOpenTo(text);
+    const cleanDesc = cleanDescription(text);
 
     return {
       categories,
@@ -208,158 +216,7 @@ export class RssService {
       organizer,
       amount,
       openTo,
-      cleanDescription
+      cleanDescription: cleanDesc
     };
-  }
-
-  private extractCategories(text: string): string[] {
-    const categories: string[] = [];
-    const lowerText = text.toLowerCase();
-
-    // First, check for combined categories (e.g., "Narrativa y Poesía", "Poesía y Cuento")
-    const combinedPatterns: Array<{ pattern: RegExp; cats: string[] }> = [
-      { pattern: /(narrativa|novela)\s+y\s+(poes[ií]a|poemas|verso)/i, cats: ['novela', 'poesia'] },
-      { pattern: /(poes[ií]a|poemas|verso)\s+y\s+(narrativa|novela)/i, cats: ['poesia', 'novela'] },
-      { pattern: /(narrativa|novela)\s+y\s+(cuento|relato|microrrelato)/i, cats: ['novela', 'relato'] },
-      { pattern: /(cuento|relato|microrrelato)\s+y\s+(narrativa|novela)/i, cats: ['relato', 'novela'] },
-      { pattern: /(poes[ií]a|poemas|verso)\s+y\s+(cuento|relato|microrrelato)/i, cats: ['poesia', 'relato'] },
-      { pattern: /(cuento|relato|microrrelato)\s+y\s+(poes[ií]a|poemas|verso)/i, cats: ['relato', 'poesia'] },
-      { pattern: /(teatro|dramaturgia)\s+y\s+(poes[ií]a|poemas|verso)/i, cats: ['teatro', 'poesia'] },
-      { pattern: /(poes[ií]a|poemas|verso)\s+y\s+(teatro|dramaturgia)/i, cats: ['poesia', 'teatro'] },
-      { pattern: /(ensayo)\s+y\s+(poes[ií]a|poemas|verso)/i, cats: ['ensayo', 'poesia'] },
-      { pattern: /(poes[ií]a|poemas|verso)\s+y\s+(ensayo)/i, cats: ['poesia', 'ensayo'] },
-      { pattern: /(infantil|juvenil)\s+y\s+(poes[ií]a|poemas|verso)/i, cats: ['infantil', 'poesia'] },
-      { pattern: /(poes[ií]a|poemas|verso)\s+y\s+(infantil|juvenil)/i, cats: ['poesia', 'infantil'] },
-    ];
-
-    for (const { pattern, cats } of combinedPatterns) {
-      if (pattern.test(lowerText)) {
-        cats.forEach(cat => {
-          if (!categories.includes(cat)) categories.push(cat);
-        });
-      }
-    }
-
-    // Then check individual categories
-    const categoryKeywords: Record<string, string[]> = {
-      'poesia': ['poesía', 'poesia', 'poemas', 'verso'],
-      'novela': ['novela', 'novelas'],
-      'relato': ['relato', 'relatos', 'cuento', 'cuentos', 'narrativa breve'],
-      'ensayo': ['ensayo', 'ensayos'],
-      'teatro': ['teatro', 'dramaturgia', 'obra de teatro'],
-      'infantil': ['infantil', 'juvenil', 'niños', 'jóvenes'],
-    };
-
-    for (const [cat, keywords] of Object.entries(categoryKeywords)) {
-      if (keywords.some(k => lowerText.includes(k))) {
-        if (!categories.includes(cat)) categories.push(cat);
-      }
-    }
-
-    return categories.length > 0 ? categories : ['otro'];
-  }
-
-  private extractPrizeTypes(text: string): string[] {
-    const lowerText = text.toLowerCase();
-    const types: string[] = [];
-
-    if (lowerText.includes('publicación') || lowerText.includes('publicacion') || lowerText.includes('edición') || lowerText.includes('edicion')) {
-      types.push('publicacion');
-    }
-    if (lowerText.includes('beca') || lowerText.includes('residencia')) {
-      types.push('becas');
-    }
-    if (lowerText.includes('€') || lowerText.includes('eur') || lowerText.includes('dólar') || lowerText.includes('dolar') || lowerText.includes('premio en metálico') || lowerText.includes('premio economico') || /\d+\.?\d*\s*(€|eur|euros)/.test(lowerText)) {
-      types.push('dinero');
-    }
-    if (lowerText.includes('trofeo') || lowerText.includes('placa') || lowerText.includes('diploma') || lowerText.includes('reconocimiento') || lowerText.includes('mención') || lowerText.includes('mencion')) {
-      types.push('reconocimiento');
-    }
-
-    return types.length > 0 ? types : ['otro'];
-  }
-
-  private extractDeadline(text: string): Date | undefined {
-    const basesSection = text.match(/BASES\s*-\s*\(([^)]*)\)/i);
-    if (basesSection) {
-      const colonDates = basesSection[1].match(/\d{1,2}:\d{1,2}:\d{4}/g);
-      if (colonDates && colonDates.length > 0) {
-        const last = colonDates[colonDates.length - 1];
-        const [day, month, year] = last.split(':').map(Number);
-        const date = new Date(year, month - 1, day);
-        if (!isNaN(date.getTime())) return date;
-      }
-    }
-
-    const patterns = [
-      /(?:plazo|fecha l[ií]mite|fecha limite|deadline|hasta el|antes del)[:\s]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i,
-      /(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/g
-    ];
-
-    for (const pattern of patterns) {
-      const matches = text.match(pattern);
-      if (matches) {
-        for (const match of matches) {
-          const dateStr = match.replace(/.*?(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}).*/, '$1');
-          const date = this.parseDate(dateStr);
-          if (date && date > new Date()) {
-            return date;
-          }
-        }
-      }
-    }
-
-    return undefined;
-  }
-
-  private extractOpenTo(text: string): string | undefined {
-    const match = text.match(/Abierto a:\s*([^)\n]+)/i);
-    const value = match?.[1]?.trim();
-    return value ? value.replace(/\s+/g, ' ') : undefined;
-  }
-
-  private extractCountry(title: string): string | undefined {
-    const match = title.trim().match(/\(([^()]+)\)\s*$/);
-    const value = match?.[1]?.trim();
-    return value || undefined;
-  }
-
-  private parseDate(str: string): Date | null {
-    const parts = str.split(/[\/\-\.]/);
-    if (parts.length === 3) {
-      const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1;
-      let year = parseInt(parts[2], 10);
-      if (year < 100) year += 2000;
-      const date = new Date(year, month, day);
-      if (!isNaN(date.getTime())) return date;
-    }
-    return null;
-  }
-
-  private extractOrganizer(text: string): string | undefined {
-    const patterns = [
-      /(?:convoca|organiza|convocante|promueve)[:\s]*([^.\n]+)/i,
-      /(?:ayuntamiento|diputación|diputacion|fundación|fundacion|universidad|editorial|instituto|centro|asociación|asociacion)[^.\n]*/i
-    ];
-
-    for (const pattern of patterns) {
-      const match = text.match(pattern);
-      if (match) return match[1]?.trim() || match[0]?.trim();
-    }
-    return undefined;
-  }
-
-  private extractAmount(text: string): string | undefined {
-    const match = text.match(/(\d+(?:[.,]\d{3})*(?:[.,]\d{2})?\s*(?:€|euros|eur|dólares|dolares|\$))/i);
-    return match ? match[1] : undefined;
-  }
-
-  private cleanDescription(text: string): string {
-    return text
-      .replace(/\s+/g, ' ')
-      .replace(/<[^>]*>/g, '')
-      .trim()
-      .substring(0, 300);
   }
 }

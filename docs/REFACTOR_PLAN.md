@@ -127,15 +127,20 @@ src/app/
 ├── data/
 │   ├── services/
 │   │   ├── rss.service.ts              # implementa ContestDataSource
-│   │   ├── parsers/
-│   │   │   ├── rss-parser.interface.ts
-│   │   │   ├── xml-rss.parser.ts
-│   │   │   └── jina-markdown.parser.ts
-│   │   └── extractors/
-│   │       ├── category.extractor.ts
-│   │       ├── prize-type.extractor.ts
-│   │       ├── deadline.extractor.ts
-│   │       └── organizer.extractor.ts
+│   │   └── parsers/
+│   │       ├── rss-parser.interface.ts
+│   │       ├── xml-rss.parser.ts
+│   │       └── jina-markdown.parser.ts
+│   ├── extractors/
+│   │   ├── category.extractor.ts
+│   │   ├── prize-type.extractor.ts
+│   │   ├── deadline.extractor.ts
+│   │   ├── organizer.extractor.ts
+│   │   ├── amount.extractor.ts
+│   │   ├── country.extractor.ts
+│   │   ├── open-to.extractor.ts
+│   │   ├── description-cleaner.ts
+│   │   └── extractors.spec.ts
 │   └── config/
 │       └── contest-keywords.ts
 ├── features/

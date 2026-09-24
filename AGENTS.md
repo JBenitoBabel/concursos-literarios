@@ -13,7 +13,7 @@
 - RxJS 7.8
 - date-fns 4.4
 - TypeScript 5.3
-- Karma/Jasmine (testing configurado, sin tests aún)
+- Jest (jest-preset-angular; tests con `npm run test`)
 - Angular CLI 17.2.1
 
 ### Estructura Principal
@@ -23,15 +23,19 @@ src/app/
 ├── app.config.ts          # Configuración app (providers, routes)
 ├── models/
 │   └── contest.model.ts   # Interfaces Contest + tipos de filtro
+├── data/
+│   ├── config/
+│   │   └── contest-keywords.ts  # Keywords/regex de categorías y premios
+│   └── extractors/        # Funciones puras de parsing (8 + extractors.spec.ts)
 └── services/
-    └── rss.service.ts     # Fetch + parsing RSS (367 líneas - violación SRP)
+    └── rss.service.ts     # Fetch + parsing RSS (221 líneas)
 ```
 
 ### Comandos Principales
 ```bash
 npm start          # ng serve (dev server en localhost:4200)
 npm run build      # ng build (producción en dist/)
-npm run test       # ng test (Karma)
+npm run test       # jest
 npm run watch      # ng build --watch --configuration development
 ```
 
