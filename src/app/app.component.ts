@@ -2,6 +2,9 @@ import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, inj
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContestStoreService } from './features/contests/services/contest-store.service';
+import { CategoryClassPipe } from './features/contests/pipes/category-class.pipe';
+import { CategoryLabelPipe } from './features/contests/pipes/category-label.pipe';
+import { PrizeLabelPipe } from './features/contests/pipes/prize-label.pipe';
 import { Contest, FilterCategory, FilterPrizeType, FilterMonth, SortOrder } from './models/contest.model';
 
 export type ThemeId = 'modern' | 'scifi' | 'wonderful' | 'retro';
@@ -12,7 +15,7 @@ const THEME_STORAGE_KEY = 'concursos-theme';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CategoryClassPipe, CategoryLabelPipe, PrizeLabelPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -118,43 +121,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  getCategoryClass(category: string): string {
-    const classes: Record<string, string> = {
-      'poesia': 'cat-poesia',
-      'novela': 'cat-novela',
-      'relato': 'cat-relato',
-      'ensayo': 'cat-ensayo',
-      'teatro': 'cat-teatro',
-      'infantil': 'cat-infantil',
-      'otro': 'cat-otro'
-    };
-    return classes[category] || 'cat-otro';
-  }
-
-  getCategoryLabel(category: string): string {
-    const labels: Record<string, string> = {
-      'poesia': 'Poesía',
-      'novela': 'Novela',
-      'relato': 'Relato',
-      'ensayo': 'Ensayo',
-      'teatro': 'Teatro',
-      'infantil': 'Infantil/Juvenil',
-      'otro': 'Otro'
-    };
-    return labels[category] || category;
-  }
-
-  getPrizeTypeLabel(type: string): string {
-    const labels: Record<string, string> = {
-      'dinero': 'Dinero',
-      'publicacion': 'Publicación',
-      'becas': 'Becas',
-      'reconocimiento': 'Reconocimiento',
-      'otro': 'Otro'
-    };
-    return labels[type] || type;
   }
 
   getDisplayTitle(contest: Contest): string {
