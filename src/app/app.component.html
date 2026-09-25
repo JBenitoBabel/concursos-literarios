@@ -53,7 +53,7 @@
 
       <button
         type="button"
-        class="btn btn-clear filters-toggle"
+        class="btn filters-toggle"
         (click)="toggleFilters()"
         [attr.aria-expanded]="filtersOpen()"
         aria-controls="filters-panel"
@@ -163,18 +163,21 @@
         </div>
 
         <div class="filter-group">
-          <label for="sort-filter" class="filter-label">Ordenar por</label>
-          <select
-            id="sort-filter"
-            class="filter-select"
-            [value]="store.sortOrder()"
-            (change)="store.setSortOrder($any($event.target).value)"
-            aria-label="Ordenar concursos por"
-            data-testid="sort-select">
+          <span id="sort-label" class="filter-label">Ordenar por</span>
+          <div class="segmented" role="radiogroup" aria-labelledby="sort-label" data-testid="sort-select">
             @for (s of sortOptions; track s.value) {
-              <option [value]="s.value">{{ s.label }}</option>
+              <label class="segmented-item">
+                <input
+                  type="radio"
+                  name="sort-order"
+                  [value]="s.value"
+                  [checked]="store.sortOrder() === s.value"
+                  (change)="store.setSortOrder(s.value)"
+                  [attr.aria-label]="s.ariaLabel">
+                <span>{{ s.label }}</span>
+              </label>
             }
-          </select>
+          </div>
         </div>
       </div>
 

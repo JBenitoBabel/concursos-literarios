@@ -53,9 +53,9 @@ export class AppComponent implements OnInit {
     { value: 'otro', label: 'Otro' }
   ];
 
-  sortOptions: { value: SortOrder; label: string }[] = [
-    { value: 'oldest', label: 'Cierre más próximo primero' },
-    { value: 'newest', label: 'Cierre más lejano primero' }
+  sortOptions: { value: SortOrder; label: string; ariaLabel: string }[] = [
+    { value: 'oldest', label: 'Cierre más próximo', ariaLabel: 'Ordenar por cierre más próximo primero' },
+    { value: 'newest', label: 'Cierre más lejano', ariaLabel: 'Ordenar por cierre más lejano primero' }
   ];
 
   sources: { value: ContestSource; label: string }[] = FEED_SOURCES.map(source => ({

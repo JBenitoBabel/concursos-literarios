@@ -21,6 +21,8 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Changed
 
+- Botón "Filtros" del acordeón con aspecto de cabecera (fondo `--bg-subtle`, borde, estado abierto resaltado en `--accent-soft`) para diferenciarlo del resto de controles del panel.
+- "Ordenar por" sustituido por un control segmentado de dos opciones inline (radios con estilo de chip): desaparece el `<select>` nativo, cuyo desplegable se abría alejado del control en móvil; en pantallas ≤768 px las opciones se apilan en columna.
 - Búsqueda con debounce de 300 ms para no recalcular el listado en cada tecla.
 - Iconos de UI unificados con Lucide: favicon con el glifo `book` del título, paths de iconos inline actualizados a la versión actual de Lucide y crédito voluntario en el footer.
 - Botón `Limpiar filtros` reubicado debajo de la fila de filtros (no en línea) para mejor jerarquía.
