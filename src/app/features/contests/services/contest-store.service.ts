@@ -1,9 +1,9 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
+import { Injectable, inject, signal, computed, effect, OnDestroy } from '@angular/core';
 import { RssService } from '../../../services/rss.service';
 import { Contest, FilterCategory, FilterPrizeType, FilterMonth, SortOrder } from '../../../models/contest.model';
 
 @Injectable({ providedIn: 'root' })
-export class ContestStoreService {
+export class ContestStoreService implements OnDestroy {
   private rssService = inject(RssService);
 
   contests = signal<Contest[]>([]);
@@ -12,11 +12,34 @@ export class ContestStoreService {
   error = signal<string | null>(null);
   lastUpdated = signal<Date | null>(null);
 
+  private searchTermRaw = signal('');
   searchTerm = signal('');
+
   selectedCategories = signal<FilterCategory[]>([]);
   selectedPrizeTypes = signal<FilterPrizeType[]>([]);
   selectedMonths = signal<FilterMonth[]>([]);
   sortOrder = signal<SortOrder>('oldest');
+
+  private debounceTimer?: ReturnType<typeof setTimeout>;
+
+  constructor() {
+    effect(() => {
+      const term = this.searchTermRaw();
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+      this.debounceTimer = setTimeout(() => {
+        this.searchTerm.set(term);
+        this.applyFilters();
+      }, 300);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+  }
 
   hasContestsWithoutDate = computed(() => {
     return this.contests().some(c => !c.deadline);
@@ -112,8 +135,7 @@ export class ContestStoreService {
   }
 
   setSearchTerm(term: string): void {
-    this.searchTerm.set(term);
-    this.applyFilters();
+    this.searchTermRaw.set(term);
   }
 
   toggleCategory(cat: FilterCategory): void {
@@ -143,6 +165,7 @@ export class ContestStoreService {
   }
 
   clearFilters(): void {
+    this.searchTermRaw.set('');
     this.searchTerm.set('');
     this.selectedCategories.set([]);
     this.selectedPrizeTypes.set([]);
