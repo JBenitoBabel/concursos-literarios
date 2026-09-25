@@ -9,6 +9,9 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Added
 
+- Filtro por fuente con checkboxes en los filtros (ninguna marcada = todas las fuentes): aplica sobre lo ya descargado, sin volver a pedir los feeds, y se incluye en "Limpiar filtros".
+- Chips de fuente en el pie de cada tarjeta con icono Lucide (`rss` para los RSS, `database` para Letras Españolas); las tarjetas fusionadas muestran todas sus fuentes.
+- Footer con las 4 fuentes y citación a Letras Españolas (letrasespanolas.org), y subtítulo del header actualizado con las 4 fuentes.
 - Listado con 4 fuentes de concursos (escritores.org, Letralia, Guía de Concursos y Letras Españolas): parsers por fuente, fetch en paralelo con tolerancia a fallos y deduplicación por URL normalizada que fusiona categorías y datos de cada tarjeta.
 - Favicon de libro en SVG (`src/assets/favicon.svg`) con enlace desde `index.html` e ICO actualizado.
 - Filtro "Sin fecha" en selector de mes para concursos sin fecha parseable.

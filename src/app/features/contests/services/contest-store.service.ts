@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, computed, effect, OnDestroy } from '@angular/core';
 import { RssService } from '../../../services/rss.service';
-import { Contest, FilterCategory, FilterPrizeType, FilterMonth, SortOrder } from '../../../models/contest.model';
+import { Contest, ContestSource, FilterCategory, FilterPrizeType, FilterMonth, SortOrder } from '../../../models/contest.model';
+import { sourcesOf } from '../../../data/services/dedup';
 
 @Injectable({ providedIn: 'root' })
 export class ContestStoreService implements OnDestroy {
@@ -18,6 +19,7 @@ export class ContestStoreService implements OnDestroy {
   selectedCategories = signal<FilterCategory[]>([]);
   selectedPrizeTypes = signal<FilterPrizeType[]>([]);
   selectedMonths = signal<FilterMonth[]>([]);
+  selectedSources = signal<ContestSource[]>([]);
   sortOrder = signal<SortOrder>('oldest');
 
   private debounceTimer?: ReturnType<typeof setTimeout>;
@@ -63,7 +65,8 @@ export class ContestStoreService implements OnDestroy {
     return this.searchTerm().trim() !== '' ||
            this.selectedCategories().length > 0 ||
            this.selectedPrizeTypes().length > 0 ||
-           this.selectedMonths().length > 0;
+           this.selectedMonths().length > 0 ||
+           this.selectedSources().length > 0;
   });
 
   loadContests(): void {
@@ -124,6 +127,11 @@ export class ContestStoreService implements OnDestroy {
       });
     }
 
+    const sources = this.selectedSources();
+    if (sources.length > 0) {
+      result = result.filter(c => sourcesOf(c).some(s => sources.includes(s)));
+    }
+
     const now = Date.now();
     const sortOrder = this.sortOrder();
     const RANK_FUTURE = 0;
@@ -178,6 +186,13 @@ export class ContestStoreService implements OnDestroy {
     this.applyFilters();
   }
 
+  toggleSource(source: ContestSource): void {
+    this.selectedSources.update(current =>
+      current.includes(source) ? current.filter(s => s !== source) : [...current, source]
+    );
+    this.applyFilters();
+  }
+
   setSortOrder(order: SortOrder): void {
     this.sortOrder.set(order);
     this.applyFilters();
@@ -189,6 +204,7 @@ export class ContestStoreService implements OnDestroy {
     this.selectedCategories.set([]);
     this.selectedPrizeTypes.set([]);
     this.selectedMonths.set([]);
+    this.selectedSources.set([]);
     this.sortOrder.set('oldest');
     this.applyFilters();
   }

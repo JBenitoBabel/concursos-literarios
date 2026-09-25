@@ -8,7 +8,9 @@ import { PrizeLabelPipe } from './features/contests/pipes/prize-label.pipe';
 import { ThemeService, type ThemeId } from './core/services/theme.service';
 import { ScrollService } from './core/services/scroll.service';
 import { InViewportDirective } from './shared/directives/in-viewport.directive';
-import { Contest, FilterCategory, FilterPrizeType, FilterMonth, SortOrder } from './models/contest.model';
+import { Contest, ContestSource, FilterCategory, FilterPrizeType, FilterMonth, SortOrder } from './models/contest.model';
+import { FEED_SOURCES, SOURCE_LABELS } from './data/config/feed-sources';
+import { sourcesOf as contestSourcesOf } from './data/services/dedup';
 
 @Component({
   selector: 'app-root',
@@ -48,6 +50,11 @@ export class AppComponent implements OnInit {
     { value: 'newest', label: 'Cierre más lejano primero' }
   ];
 
+  sources: { value: ContestSource; label: string }[] = FEED_SOURCES.map(source => ({
+    value: source.id,
+    label: SOURCE_LABELS[source.id]
+  }));
+
   ngOnInit() {
     this.store.loadContests();
   }
@@ -68,6 +75,14 @@ export class AppComponent implements OnInit {
     return contest.country
       ? contest.title.replace(/\s*\([^()]+\)\s*$/, '').trim()
       : contest.title;
+  }
+
+  sourcesOf(contest: Contest): ContestSource[] {
+    return contestSourcesOf(contest);
+  }
+
+  sourceLabel(source: ContestSource): string {
+    return SOURCE_LABELS[source];
   }
 
   formatDate(date: Date | undefined): string {
