@@ -26,6 +26,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 - Cabecera reorganizada: selector de temas a la derecha del título, encima de la fecha de actualización, y oculto al hacer scroll para reducir altura.
 - La fecha del formato `BASES` se interpreta como fecha de cierre y se muestra como "Cierre:" en la tarjeta; los badges "¡Pronto!" y "Cerrado" se reactivan.
 - Orden por defecto del listado: "Cierre más próximo primero"; etiquetas de orden y filtro de mes renombradas a cierre.
+- Orden del listado por bloques: cierres futuros, después cerrados y concursos sin fecha al final; al elegir "Cierre más lejano primero" los bloques se invierten (sin fecha al principio).
 - Se eliminan de la tarjeta la descripción redundante (formato `dd:mm:yyyy`), las filas "Organizador" y "Género" y el meta "Publicado" (el RSS real no incluye `pubDate`).
 - El título se muestra sin el sufijo de país, ahora representado como badge.
 

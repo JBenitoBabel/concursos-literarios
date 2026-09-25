@@ -124,11 +124,30 @@ export class ContestStoreService implements OnDestroy {
       });
     }
 
-    result.sort((a, b) => {
-      const dateA = a.deadline || a.pubDate;
-      const dateB = b.deadline || b.pubDate;
-      const diff = dateA.getTime() - dateB.getTime();
-      return this.sortOrder() === 'newest' ? -diff : diff;
+    const now = Date.now();
+    const sortOrder = this.sortOrder();
+    const RANK_FUTURE = 0;
+    const RANK_CLOSED = 1;
+    const RANK_NO_DATE = 2;
+    const getBlockRank = (contest: Contest): number => {
+      if (!contest.deadline) {
+        return RANK_NO_DATE;
+      }
+      return contest.deadline.getTime() < now ? RANK_CLOSED : RANK_FUTURE;
+    };
+    const getSortRank = (contest: Contest): number => {
+      const blockRank = getBlockRank(contest);
+      return sortOrder === 'newest' ? RANK_NO_DATE - blockRank : blockRank;
+    };
+    result.sort((contestA, contestB) => {
+      const rankDifference = getSortRank(contestA) - getSortRank(contestB);
+      if (rankDifference !== 0) {
+        return rankDifference;
+      }
+      const dateA = contestA.deadline ?? contestA.pubDate;
+      const dateB = contestB.deadline ?? contestB.pubDate;
+      const dateDifference = dateA.getTime() - dateB.getTime();
+      return sortOrder === 'newest' ? -dateDifference : dateDifference;
     });
 
     this.filteredContests.set(result);
