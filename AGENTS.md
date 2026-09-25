@@ -138,3 +138,8 @@ export class DataService {
    - El favicon (`src/assets/favicon.svg` + `src/favicon.ico`) usa el glifo `book` de Lucide sobre badge `#4f46e5`; si se cambia, regenerar `.ico` (resvg + png-to-ico)
    - **No usar Flaticon, Font Awesome ni otras fuentes** — mantener consistencia visual con Lucide
    - Al añadir un icono nuevo, verificar que el path coincida con la versión actual de Lucide (los paths antiguos de versiones previas no deben reutilizarse)
+   - **Excepción: iconos de marca desde [Simple Icons](https://simpleicons.org)** (CC0) — Lucide no incluye logos de marcas. Usado en el footer para redes sociales (Bluesky, Instagram). Convención:
+     - Path copiado desde `simpleicons.org/icons/<slug>.svg`
+     - Formato inline: `<svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">` + path (Simple Icons es *fill*, no stroke — CSS `.social-icon { fill: currentColor; ... }`, clase separada de `.icon`)
+     - Enlace con `target="_blank" rel="noopener"` + `aria-label` descriptivo
+     - Crédito Simple Icons en `.footer-note` del footer (junto al de Lucide)

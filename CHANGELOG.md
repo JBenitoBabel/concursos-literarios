@@ -9,6 +9,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Added
 
+- Redes sociales (Bluesky e Instagram) en el footer con iconos de Simple Icons, en la misma fila que el eslogan "Recursos escritoriles" y la autoría "© Julia Bengar"; crédito a Simple Icons en el pie y `meta author` en `index.html`.
 - Panel de filtros colapsable en móvil (≤768 px): botón "Filtros" con contador de filtros activos y chevron; colapsado por defecto, con buscador y contador de resultados siempre visibles; en escritorio los filtros siguen siempre desplegados.
 - Filtro por fuente con checkboxes en los filtros (ninguna marcada = todas las fuentes): aplica sobre lo ya descargado, sin volver a pedir los feeds, y se incluye en "Limpiar filtros".
 - Chips de fuente en el pie de cada tarjeta con icono Lucide (`rss` para los RSS, `database` para Letras Españolas); las tarjetas fusionadas muestran todas sus fuentes.
