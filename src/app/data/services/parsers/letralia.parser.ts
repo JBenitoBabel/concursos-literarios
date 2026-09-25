@@ -3,6 +3,7 @@ import { SourceParser } from './source-parser.interface';
 import { parseXml, getRssItems, getTextContent, getRssCategories, stripTags } from './xml-utils';
 import { isJinaMarkdown, parseJinaEntries, jinaEntryBody } from './jina-utils';
 import { mapSourceCategory } from '../../config/contest-keywords';
+import { extractCategories } from '../../extractors/category.extractor';
 import { extractPrizeTypes } from '../../extractors/prize-type.extractor';
 import { parseDate } from '../../extractors/deadline.extractor';
 import { cleanDescription } from '../../extractors/description-cleaner';
@@ -102,7 +103,7 @@ export class LetraliaParser implements SourceParser {
         link: entry.link,
         description,
         pubDate: entry.pubDate,
-        categories: ['otro'],
+        categories: extractCategories(entry.title),
         prizeTypes: extractPrizeTypes(description),
         rawDescription: description,
         source: 'letralia',

@@ -9,6 +9,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Added
 
+- Listado con 4 fuentes de concursos (escritores.org, Letralia, Guía de Concursos y Letras Españolas): parsers por fuente, fetch en paralelo con tolerancia a fallos y deduplicación por URL normalizada que fusiona categorías y datos de cada tarjeta.
 - Favicon de libro en SVG (`src/assets/favicon.svg`) con enlace desde `index.html` e ICO actualizado.
 - Filtro "Sin fecha" en selector de mes para concursos sin fecha parseable.
 - Campos `openTo` y `country` en el modelo `Contest`, con fila "Abierto a:" y badge de país en la tarjeta.

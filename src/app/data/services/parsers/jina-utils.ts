@@ -9,6 +9,9 @@ export interface JinaEntry {
   text: string;
 }
 
+const RFC822_DATE = /^[A-Z][a-z]{2}, \d{1,2} [A-Z][a-z]{2} \d{4} \d{2}:\d{2}:\d{2} [+-]\d{4}$/;
+const URL_LINE = /^\[?https?:\/\/\S+\]?(\(\S*\))?$/;
+
 export function parseJinaEntries(markdown: string): JinaEntry[] {
   const entries: JinaEntry[] = [];
   const parts = markdown.split(/###\s*\[/);
@@ -19,10 +22,15 @@ export function parseJinaEntries(markdown: string): JinaEntry[] {
       continue;
     }
     const publishedTime = parts[i].match(/Published Time:\s*([^\n]+)/);
+    const entryDate = parts[i]
+      .split('\n')
+      .map(line => line.trim())
+      .find(line => RFC822_DATE.test(line));
+    const rawDate = publishedTime?.[1].trim() ?? entryDate;
     entries.push({
       title: titleLink[1].trim(),
       link: titleLink[2].trim(),
-      pubDate: publishedTime ? new Date(publishedTime[1].trim()) : new Date(),
+      pubDate: rawDate ? new Date(rawDate) : new Date(),
       text: parts[i],
     });
   }
@@ -31,9 +39,25 @@ export function parseJinaEntries(markdown: string): JinaEntry[] {
 }
 
 export function jinaEntryBody(entry: string): string {
-  return entry
-    .replace(/^[^\n]*\]\([^\)]*\)\s*/, '')
-    .replace(/Published Time:[^\n]*\n?/g, ' ')
+  const bodyLines = entry
+    .split('\n')
+    .slice(1)
+    .map(line => line.trim())
+    .filter(line => {
+      if (!line) {
+        return false;
+      }
+      if (line.startsWith('Published Time:')) {
+        return false;
+      }
+      if (RFC822_DATE.test(line)) {
+        return false;
+      }
+      return !URL_LINE.test(line);
+    });
+
+  return bodyLines
+    .join(' ')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/\s+/g, ' ')
     .trim()

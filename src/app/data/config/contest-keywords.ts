@@ -48,6 +48,7 @@ export const SOURCE_CATEGORY_MAPS: Record<MappedSource, Record<string, string>> 
     'concursos de narrativa': 'relato',
     'concursos de microrrelato': 'relato',
     'concursos de relato': 'relato',
+    'concursos de prosa': 'relato',
     'concursos de novela': 'novela',
     'concursos de ensayo': 'ensayo',
     'concursos de dramaturgia': 'teatro',

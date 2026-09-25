@@ -5,6 +5,7 @@ import { isJinaMarkdown, parseJinaEntries, jinaEntryBody } from './jina-utils';
 import { mapSourceCategory, PRIZE_REGEX } from '../../config/contest-keywords';
 import { extractAmount } from '../../extractors/amount.extractor';
 import { extractDeadline } from '../../extractors/deadline.extractor';
+import { extractCategories } from '../../extractors/category.extractor';
 import { extractPrizeTypes } from '../../extractors/prize-type.extractor';
 import { cleanDescription } from '../../extractors/description-cleaner';
 
@@ -94,7 +95,7 @@ export class GuiadeconcursosParser implements SourceParser {
         link: entry.link,
         description,
         pubDate: entry.pubDate,
-        categories: ['otro'],
+        categories: extractCategories(entry.title),
         prizeTypes: extractPrizeTypes(entry.title),
         amount: this.extractAmount(entry.title),
         rawDescription: description,
