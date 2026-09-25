@@ -13,25 +13,37 @@ export class InViewportDirective implements OnInit, OnDestroy {
 
   scrolledChange = output<boolean>();
 
+  private isScrolled = false;
+
   ngOnInit(): void {
+    this.isScrolled = window.scrollY > this.enterThreshold();
+    this.setupObserver(!this.isScrolled);
+    this.scrolledChange.emit(this.isScrolled);
+  }
+
+  private setupObserver(forEnter: boolean): void {
     const sentinel = this.elementRef.nativeElement;
-    const isInitiallyScrolled = window.scrollY > this.enterThreshold();
+    if (!sentinel) return;
+
+    this.observer?.disconnect();
+
+    sentinel.style.top = forEnter ? `${this.enterThreshold()}px` : `${this.exitThreshold()}px`;
 
     this.observer = new IntersectionObserver(
       ([entry]) => {
-        const isScrolled = !entry.isIntersecting;
-        sentinel.style.top = `${isScrolled ? this.exitThreshold() : this.enterThreshold()}px`;
-        this.scrolledChange.emit(isScrolled);
+        if (forEnter && !entry.isIntersecting) {
+          this.isScrolled = true;
+          this.scrolledChange.emit(true);
+          this.setupObserver(false);
+        } else if (!forEnter && entry.isIntersecting) {
+          this.isScrolled = false;
+          this.scrolledChange.emit(false);
+          this.setupObserver(true);
+        }
       },
-      {
-        root: null,
-        rootMargin: `0px`,
-        threshold: 0,
-      }
+      { root: null, rootMargin: '0px', threshold: 0 }
     );
 
-    sentinel.style.top = `${isInitiallyScrolled ? this.exitThreshold() : this.enterThreshold()}px`;
-    this.scrolledChange.emit(isInitiallyScrolled);
     this.observer.observe(sentinel);
   }
 
