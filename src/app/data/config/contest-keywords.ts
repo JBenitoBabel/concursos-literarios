@@ -34,3 +34,93 @@ export const PRIZE_KEYWORDS: Record<PrizeKeywordKey, string[]> = {
 export const PRIZE_REGEX = {
   dinero: /\d+\.?\d*\s*(€|eur|euros)/i,
 };
+
+export type MappedSource = 'letralia' | 'guiadeconcursos' | 'letrasespanolas';
+
+export const SOURCE_CATEGORY_MAPS: Record<MappedSource, Record<string, string>> = {
+  letralia: {
+    'concursos de poesía': 'poesia',
+    'concursos de poesia': 'poesia',
+    'concursos de poema': 'poesia',
+    'concursos de poemas': 'poesia',
+    'concursos de cuento': 'relato',
+    'concursos de cuentos': 'relato',
+    'concursos de narrativa': 'relato',
+    'concursos de microrrelato': 'relato',
+    'concursos de relato': 'relato',
+    'concursos de novela': 'novela',
+    'concursos de ensayo': 'ensayo',
+    'concursos de dramaturgia': 'teatro',
+    'concursos de teatro': 'teatro',
+    'concursos de infantil': 'infantil',
+    'concursos infantiles': 'infantil',
+  },
+  guiadeconcursos: {
+    'poesía': 'poesia',
+    'poesia': 'poesia',
+    'novela': 'novela',
+    'cuento-relato': 'relato',
+    'cuento': 'relato',
+    'relato': 'relato',
+    'microrrelato': 'relato',
+    'ensayo': 'ensayo',
+    'dramaturgia': 'teatro',
+    'teatro': 'teatro',
+    'infantil': 'infantil',
+    'juvenil': 'infantil',
+    'infantil/juvenil': 'infantil',
+  },
+  letrasespanolas: {
+    'poesia': 'poesia',
+    'poesía': 'poesia',
+    'relato corto': 'relato',
+    'relato': 'relato',
+    'microrrelato': 'relato',
+    'cuento': 'relato',
+    'novela corta': 'novela',
+    'novela': 'novela',
+    'ensayo': 'ensayo',
+    'teatro': 'teatro',
+    'dramaturgia': 'teatro',
+    'infantil': 'infantil',
+    'otro': 'otro',
+  },
+};
+
+export const SOURCE_CATEGORY_NOISE: Record<MappedSource, string[]> = {
+  letralia: [
+    'convocatorias en las que se puede participar por internet',
+    'convocatorias a publicaciones',
+    'otros concursos y convocatorias',
+    'artes plásticas',
+    'artes plasticas',
+    'fotografía',
+    'fotografia',
+    'audiovisual',
+    'periodismo',
+  ],
+  guiadeconcursos: [
+    'concursos literarios',
+    'por email-online',
+    'por email online',
+  ],
+  letrasespanolas: [],
+};
+
+export function mapSourceCategory(source: MappedSource, raw: string): string | null {
+  const normalized = raw.trim().toLowerCase();
+  if (!normalized) return null;
+
+  const mapped = SOURCE_CATEGORY_MAPS[source][normalized];
+  if (mapped) return mapped;
+
+  if (SOURCE_CATEGORY_NOISE[source].some(noise => normalized === noise || normalized.includes(noise))) {
+    return null;
+  }
+
+  if (source === 'guiadeconcursos' && raw === raw.toLowerCase()) {
+    return null;
+  }
+
+  return 'otro';
+}

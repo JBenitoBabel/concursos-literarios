@@ -1,3 +1,5 @@
+export type ContestSource = 'escritores' | 'letralia' | 'guiadeconcursos' | 'letrasespanolas';
+
 export interface Contest {
   title: string;
   link: string;
@@ -11,6 +13,7 @@ export interface Contest {
   openTo?: string;
   country?: string;
   rawDescription: string;
+  source?: ContestSource;
 }
 
 export type FilterCategory = 'all' | 'poesia' | 'novela' | 'relato' | 'ensayo' | 'teatro' | 'infantil' | 'otro';
