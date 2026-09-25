@@ -1,5 +1,5 @@
-<div class="app-container" [attr.data-theme]="theme()">
-  <div #headerSentinel class="header-sentinel" aria-hidden="true"></div>
+<div class="app-container" [attr.data-theme]="themeService.theme()">
+  <div #headerSentinel class="header-sentinel" aria-hidden="true" appInViewport (scrolledChange)="onScrolledChange($event)"></div>
   <header class="app-header" [class.scrolled]="scrolled()">
     <div class="header-top">
       <div class="header-brand">
@@ -13,11 +13,11 @@
       </div>
       <div class="header-controls">
         <div class="theme-selector" [class.is-hidden]="scrolled()" [attr.aria-hidden]="scrolled() ? 'true' : 'false'" role="group" aria-label="Selector de tema" data-testid="theme-selector">
-          @for (t of themes; track t.id) {
+          @for (t of themeService.themes; track t.id) {
             <button
               type="button"
               class="theme-btn"
-              [attr.aria-pressed]="theme() === t.id"
+              [attr.aria-pressed]="themeService.theme() === t.id"
               [attr.aria-label]="'Cambiar a tema ' + t.label"
               (click)="setTheme(t.id)"
               [attr.data-testid]="'theme-' + t.id">

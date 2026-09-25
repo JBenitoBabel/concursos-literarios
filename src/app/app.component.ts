@@ -1,41 +1,29 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ChangeDetectionStrategy, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContestStoreService } from './features/contests/services/contest-store.service';
 import { CategoryClassPipe } from './features/contests/pipes/category-class.pipe';
 import { CategoryLabelPipe } from './features/contests/pipes/category-label.pipe';
 import { PrizeLabelPipe } from './features/contests/pipes/prize-label.pipe';
+import { ThemeService, type ThemeId } from './core/services/theme.service';
+import { ScrollService } from './core/services/scroll.service';
+import { InViewportDirective } from './shared/directives/in-viewport.directive';
 import { Contest, FilterCategory, FilterPrizeType, FilterMonth, SortOrder } from './models/contest.model';
-
-export type ThemeId = 'modern' | 'scifi' | 'wonderful' | 'retro';
-
-const THEME_IDS: ThemeId[] = ['modern', 'scifi', 'wonderful', 'retro'];
-const THEME_STORAGE_KEY = 'concursos-theme';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, CategoryClassPipe, CategoryLabelPipe, PrizeLabelPipe],
+  imports: [CommonModule, FormsModule, CategoryClassPipe, CategoryLabelPipe, PrizeLabelPipe, InViewportDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit {
   store = inject(ContestStoreService);
+  themeService = inject(ThemeService);
+  scrollService = inject(ScrollService);
 
   scrolled = signal(false);
-
-  @ViewChild('headerSentinel', { static: false }) headerSentinel?: ElementRef<HTMLElement>;
-  private headerObserver?: IntersectionObserver;
-
-  theme = signal<ThemeId>('modern');
-
-  themes: { id: ThemeId; label: string }[] = [
-    { id: 'modern', label: 'Moderno' },
-    { id: 'scifi', label: 'Sci-Fi' },
-    { id: 'wonderful', label: 'Wonderful' },
-    { id: 'retro', label: 'Retro' }
-  ];
 
   categories: { value: FilterCategory; label: string }[] = [
     { value: 'poesia', label: 'Poesía' },
@@ -61,66 +49,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   ngOnInit() {
-    this.restoreTheme();
     this.store.loadContests();
   }
 
-  ngAfterViewInit() {
-    this.syncScrolledFromPosition();
-    this.setupHeaderObserver(!this.scrolled());
+  onScrolledChange(isScrolled: boolean): void {
+    this.scrolled.set(isScrolled);
   }
 
-  ngOnDestroy() {
-    this.headerObserver?.disconnect();
+  setTheme(id: ThemeId): void {
+    this.themeService.setTheme(id);
   }
 
-  private syncScrolledFromPosition() {
-    const y = window.scrollY;
-    if (!this.scrolled() && y > 80) this.scrolled.set(true);
-    else if (this.scrolled() && y < 40) this.scrolled.set(false);
-  }
-
-  private setupHeaderObserver(forEnter: boolean) {
-    const sentinel = this.headerSentinel?.nativeElement;
-    if (!sentinel) return;
-    this.headerObserver?.disconnect();
-    sentinel.style.top = forEnter ? '80px' : '40px';
-    this.headerObserver = new IntersectionObserver(([entry]) => {
-      if (forEnter && !entry.isIntersecting) {
-        this.scrolled.set(true);
-        this.setupHeaderObserver(false);
-      } else if (!forEnter && entry.isIntersecting) {
-        this.scrolled.set(false);
-        this.setupHeaderObserver(true);
-      }
-    }, { root: null, rootMargin: '0px', threshold: 0 });
-    this.headerObserver.observe(sentinel);
-  }
-
-  setTheme(id: ThemeId) {
-    this.theme.set(id);
-    document.documentElement.setAttribute('data-theme', id);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, id);
-    } catch {
-      // localStorage no disponible
-    }
-  }
-
-  private restoreTheme() {
-    try {
-      const saved = localStorage.getItem(THEME_STORAGE_KEY) as ThemeId | null;
-      if (saved && THEME_IDS.includes(saved)) {
-        this.theme.set(saved);
-        document.documentElement.setAttribute('data-theme', saved);
-      }
-    } catch {
-      // localStorage no disponible
-    }
-  }
-
-  scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  scrollToTop(): void {
+    this.scrollService.scrollToTop();
   }
 
   getDisplayTitle(contest: Contest): string {
