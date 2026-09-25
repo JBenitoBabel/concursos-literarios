@@ -51,6 +51,22 @@
         <span id="search-hint" class="visually-hidden">Escribe para filtrar la lista en tiempo real</span>
       </div>
 
+      <button
+        type="button"
+        class="btn btn-clear filters-toggle"
+        (click)="toggleFilters()"
+        [attr.aria-expanded]="filtersOpen()"
+        aria-controls="filters-panel"
+        data-testid="filters-toggle">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/></svg>
+        <span>Filtros</span>
+        @if (activeFilterCount() > 0) {
+          <span class="filters-toggle-count">{{ activeFilterCount() }}</span>
+        }
+        <svg class="icon filters-toggle-chevron" viewBox="0 0 24 24" aria-hidden="true" [class.rotated]="filtersOpen()"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+
+      <div class="filters-panel" id="filters-panel" [class.open]="filtersOpen()">
       <div class="filters-row">
         <div class="filter-group">
           <label class="filter-label">Categoría</label>
@@ -169,6 +185,7 @@
           </button>
         </div>
       }
+      </div>
 
       <div class="results-count">
         {{ store.filteredContests().length }} concurso{{ store.filteredContests().length !== 1 ? 's' : '' }} encontrado{{ store.filteredContests().length !== 1 ? 's' : '' }}

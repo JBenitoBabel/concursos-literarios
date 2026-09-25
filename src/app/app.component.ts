@@ -26,6 +26,14 @@ export class AppComponent implements OnInit {
   scrollService = inject(ScrollService);
 
   scrolled = signal(false);
+  filtersOpen = signal(false);
+
+  activeFilterCount = computed(() =>
+    this.store.selectedCategories().length +
+    this.store.selectedPrizeTypes().length +
+    this.store.selectedMonths().length +
+    this.store.selectedSources().length
+  );
 
   categories: { value: FilterCategory; label: string }[] = [
     { value: 'poesia', label: 'Poesía' },
@@ -65,6 +73,10 @@ export class AppComponent implements OnInit {
 
   setTheme(id: ThemeId): void {
     this.themeService.setTheme(id);
+  }
+
+  toggleFilters(): void {
+    this.filtersOpen.update(open => !open);
   }
 
   scrollToTop(): void {

@@ -9,6 +9,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Added
 
+- Panel de filtros colapsable en móvil (≤768 px): botón "Filtros" con contador de filtros activos y chevron; colapsado por defecto, con buscador y contador de resultados siempre visibles; en escritorio los filtros siguen siempre desplegados.
 - Filtro por fuente con checkboxes en los filtros (ninguna marcada = todas las fuentes): aplica sobre lo ya descargado, sin volver a pedir los feeds, y se incluye en "Limpiar filtros".
 - Chips de fuente en el pie de cada tarjeta con icono Lucide (`rss` para los RSS, `database` para Letras Españolas); las tarjetas fusionadas muestran todas sus fuentes.
 - Footer con las 4 fuentes y citación a Letras Españolas (letrasespanolas.org), y subtítulo del header actualizado con las 4 fuentes.

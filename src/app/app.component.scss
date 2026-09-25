@@ -300,6 +300,33 @@ $transition: all 0.2s ease;
   }
 }
 
+.filters-toggle-count {
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.filters-toggle-chevron {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.filters-panel {
+  display: contents;
+}
+
 .filters-row {
   display: flex;
   flex-wrap: wrap;
@@ -809,6 +836,10 @@ $transition: all 0.2s ease;
   }
 }
 
+.filters-toggle {
+  display: none;
+}
+
 .btn-retry {
   background: var(--accent);
   color: var(--accent-contrast);
@@ -1213,6 +1244,20 @@ $transition: all 0.2s ease;
 
   .filter-group {
     min-width: 0;
+  }
+
+  .filters-toggle {
+    display: flex;
+    width: 100%;
+  }
+
+  .filters-panel {
+    display: block;
+    margin-top: 1rem;
+
+    &:not(.open) {
+      display: none;
+    }
   }
 
   .filter-actions {
