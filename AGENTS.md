@@ -5,7 +5,7 @@
 **Nombre:** ConcursosLiterarios  
 **Framework:** Angular 17.2 (standalone components, signals)  
 **Estilo:** SCSS con CSS Variables theming  
-**RSS Source:** escritores.org (RSS XML + fallback Jina AI markdown)  
+**RSS Source:** 4 fuentes — escritores.org, Letralia, Guía de Concursos (RSS/XML + fallback Jina AI markdown) y Letras Españolas (JSON, CORS directo)  
 **Deployment:** Vercel (ver `.vercel/project.json`)  
 
 ### Stack Tecnológico
@@ -25,10 +25,14 @@ src/app/
 │   └── contest.model.ts   # Interfaces Contest + tipos de filtro
 ├── data/
 │   ├── config/
-│   │   └── contest-keywords.ts  # Keywords/regex de categorías y premios
+│   │   ├── contest-keywords.ts  # Keywords/regex de categorías y premios + mapSourceCategory()
+│   │   └── feed-sources.ts      # FEED_SOURCES (4 fuentes) + SOURCE_LABELS
+│   ├── services/
+│   │   ├── dedup.ts             # normalizeUrl + dedupeContests (unión de sources[])
+│   │   └── parsers/             # 1 parser por fuente + registry (5 specs)
 │   └── extractors/        # Funciones puras de parsing (8 + extractors.spec.ts)
 └── services/
-    └── rss.service.ts     # Fetch + parsing RSS (221 líneas)
+    └── rss.service.ts     # Fetch de 4 fuentes (forkJoin) + parsing + dedup
 ```
 
 ### Comandos Principales
@@ -123,9 +127,9 @@ export class DataService {
 
 1. **El refactor SOLID y multi-fuentes son complementarios** - El plan multi-fuentes ya prevé strategy pattern para parsers que encaja en la arquitectura objetivo del refactor
 2. **Recomendación:** Implementar multi-fuentes primero (valor inmediato usuario), luego refactor SOLID
-3. **No hay tests** - Cualquier cambio debe verificarse manualmente con `ng serve`
+3. **Tests con Jest** - `npm run test` (73 tests: parsers, dedup y extractors); los cambios de UI se verifican además manualmente con `ng serve`
 4. **CSS Variables theming** - Temas definidos en `:root` y `[data-theme="..."]` en `styles.scss`
-5. **CORS Proxies** - Cascada de 4 proxies en `rss.service.ts:CORS_PROXIES`
+5. **CORS Proxies** - Cascada de 2 proxies (`allorigins`, `jina`) en `rss.service.ts:CORS_PROXIES`; el JSON de Letras Españolas va directo (CORS `*`)
 6. **SEO requiere prerendering** - `SEO_PLAN.md` prevé SSG + RSS en build-time (`scripts/build-rss-data.ts` → `src/assets/rss-data.json`); esto afecta a `rss.service.ts` (debe leer JSON estático en browser, no fetch runtime)
 7. **Iconos: usar exclusivamente Lucide** - Todos los iconos SVG inline del proyecto (título, favicon, UI, estados, tags) provienen de [Lucide](https://lucide.dev) (licencia ISC, sin atribución obligatoria; hay crédito voluntario en el footer). **Convención:**
    - Copiar el path desde [lucide.dev/icons](https://lucide.dev/icons) o `github.com/lucide-icons/lucide/main/icons/<nombre>.svg`

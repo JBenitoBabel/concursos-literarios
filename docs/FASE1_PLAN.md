@@ -11,12 +11,12 @@
 |-------|--------|---------------|
 | A. Modelo y configuración | ✅ Hecha | `e1ccdc8 feat: add contest source model and multi-source feed config` (develop) |
 | B. Parsers | ✅ Hecha | `6e1fbc9 feat: add per-source parsers and registry for the four feeds` (develop) |
-| C. Fetch + dedup | ✅ Hecha | **⚠️ SIN COMMITEAR** — subir con flujo `push-develop` antes de empezar D |
-| D. UI (badge, footer, orden, checkboxes fuente) | ⬜ Pendiente | Ampliada con decisiones de 2026-09-25 (ver abajo) |
-| E. Tests Jest | ⬜ Pendiente | |
-| F. Verificación, docs, commits | ⬜ Pendiente | |
+| C. Fetch + dedup | ✅ Hecha | `6278101 feat: fetch the four sources in parallel and deduplicate by normalized url` (develop) |
+| D. UI (badge, footer, orden, checkboxes fuente) | ✅ Hecha | `87e17bd` + `18a7b9a` + `8bd361e` (develop) |
+| E. Tests Jest | ✅ Hecha | `f71409a test: add dedup and four-source parser specs` — 73 tests en verde |
+| F. Verificación, docs, commits | ✅ Hecha | build ✓ · 73 tests ✓ · checklist manual ✓ · docs (AGENTS + plan) |
 
-**Siguiente sesión:** ① subir C → ② D → ③ E → ④ F.
+**Siguiente sesión:** Fase 1 completa. Ver `docs/MULTI_SOURCE_PLAN.md` / `docs/REFACTOR_PLAN.md` para siguientes fases (P2 strategy parsers, fuzzy dedup...).
 
 ### Archivos del estado actual
 
@@ -27,13 +27,14 @@ src/app/
 │   ├── feed-sources.ts                  # A: FEED_SOURCES (4 fuentes)
 │   └── contest-keywords.ts              # A: SOURCE_CATEGORY_MAPS/NOISE + mapSourceCategory()
 ├── data/services/
-│   ├── dedup.ts                         # C: normalizeUrl + dedupeContests (SIN COMMIT)
+│   ├── dedup.ts + dedup.spec.ts          # C: normalizeUrl + dedupeContests (commiteado en C/E)
 │   └── parsers/                         # B: 8 archivos (interface, xml-utils, jina-utils,
 │                                        #     escritores/letralia/guiadeconcursos/letrasespanolas, registry)
-└── services/rss.service.ts              # C: refactor forkJoin + cascada corregida (SIN COMMIT)
+│                                        #     + 4 specs (E)
+└── services/rss.service.ts              # C: refactor forkJoin + cascada corregida
 ```
 
-Pendiente de commit en C: `dedup.ts` (nuevo) · `rss.service.ts` · `contest-keywords.ts` · `letralia.parser.ts` · `guiadeconcursos.parser.ts` · `jina-utils.ts`.
+Todo commiteado en develop (C en `6278101`, D en `87e17bd`/`18a7b9a`/`8bd361e`, E en `f71409a`).
 
 ---
 
@@ -46,7 +47,7 @@ Pendiente de commit en C: `dedup.ts` (nuevo) · `rss.service.ts` · `contest-key
 | UI atribución | **Incluida**: chips de fuente en card (varias si la tarjeta es fusionada) + citación a Letras Españolas en footer (compromisos éticos 2 y 5 de MULTI_SOURCE_PLAN) |
 | Tests | **Incluidos**: Jest con fixtures para parsers y dedup |
 | Filtro por fuente | **Incluido** (cambio de decisión 2026-09-25, usuario lo pidió): checkboxes en filtros, **filtro visual sin refetch** + `sources[]` unión en dedup. Ninguna marcada = todas |
-| Orden de tarjetas | **Nuevo** (2026-09-25): en ambos órdenes → ① cierres futuros ② cerrados ③ **sin fecha al final**. Mismo criterio de "cerrado" que el badge (`deadline < new Date()`, `app.component.ts:85-88`) |
+| Orden de tarjetas | **Confirmado A** (2026-09-25, usuario): "Cierre más próximo primero" → ① cierres futuros ② cerrados ③ sin fecha; "Cierre más lejano primero" → **espejo completo** (sin fecha → cerrados → futuros). Mismo criterio de "cerrado" que el badge (`deadline < new Date()`, `app.component.ts:85-88`) |
 | Badge de fuente | **Multi-chip**: cada tarjeta muestra chips de **todas** sus fuentes (fusionadas escritores+LE → 2 chips). Iconos Lucide: `rss` (3 RSS) y `database` (JSON LE) |
 | Smoke test | Temporal (borrado): pipeline end-to-end contra feeds reales antes de la verificación manual |
 
@@ -73,8 +74,8 @@ Pendiente de commit en C: `dedup.ts` (nuevo) · `rss.service.ts` · `contest-key
 ## Etapas
 
 ### A. Modelo y configuración ✅
-1. `contest.model.ts` — `ContestSource` + `source?: ContestSource`. **Pendiente en D5**: `sources?: ContestSource[]`.
-2. `data/config/feed-sources.ts` — `FeedSource[]` (`id`, `url`, `kind`, `useProxy`). **Pendiente en D5**: `SOURCE_LABELS`.
+1. `contest.model.ts` — `ContestSource` + `source?: ContestSource`. `sources?: ContestSource[]` (hecho en D5).
+2. `data/config/feed-sources.ts` — `FeedSource[]` (`id`, `url`, `kind`, `useProxy`). `SOURCE_LABELS` (hecho en D5).
 3. `data/config/contest-keywords.ts` — `SOURCE_CATEGORY_MAPS`, `SOURCE_CATEGORY_NOISE` y `mapSourceCategory()` por fuente (map primero, luego ruido, luego tag libre minúscula en Guia, si no → `'otro'`; parser hace fallback a `['otro']` si queda vacío). Incluye `concursos de prosa → relato`.
 
 ### B. Parsers ✅
@@ -87,8 +88,8 @@ Pendiente de commit en C: `dedup.ts` (nuevo) · `rss.service.ts` · `contest-key
 10. `parsers/letrasespanolas.parser.ts` — valida `JSON.parse` + `Array.isArray`; `fecha_limite` dd/mm/yyyy; `organizacion === 'No especificada' → undefined`; `categoria` split `|`.
 11. `parsers/parser-registry.ts` — `PARSERS: Record<ContestSource, SourceParser>` (añadir fuente = config + parser + 1 línea).
 
-### C. Fetch + dedup ✅ (sin commitear)
-12. `data/services/dedup.ts` — `normalizeUrl` (exacto del plan; **usar `searchParams.forEach`**, `URLSearchParams.keys()` no compila: falta `lib: dom.iterable`) + `dedupeContests` (prioridad `escritores > letrasespanolas > letralia > guiadeconcursos`, unión de categorías, fill `deadline`/`amount`/`organizer`; clave fallback `sin-url:${title}` si no hay link). **D5 añadirá unión de `sources[]` + exportar `sourcesOf(contest)`** (la usará el store).
+### C. Fetch + dedup ✅
+12. `data/services/dedup.ts` — `normalizeUrl` (exacto del plan; **usar `searchParams.forEach`**, `URLSearchParams.keys()` no compila: falta `lib: dom.iterable`) + `dedupeContests` (prioridad `escritores > letrasespanolas > letralia > guiadeconcursos`, unión de categorías, fill `deadline`/`amount`/`organizer`; clave fallback `sin-url:${title}` si no hay link). Unión de `sources[]` + `sourcesOf(contest)` añadidos en D5 (los usa el store).
 13. `services/rss.service.ts` — `forkJoin` sobre `FEED_SOURCES`; por fuente `catchError → of(null)` + `console.warn` ("Fuente caída"); todas fallan → `throwError` (store muestra error + Reintentar); parsers por fuente + `dedupeContests`; **1 solo** `console.log` resumen (`conteos por fuente: X=… → total N, tras dedup M`); sin sort; sin `console.log` de debug.
 
 **Desviaciones respecto al plan (hechas en C, mantener):**
@@ -105,11 +106,12 @@ Pendiente de commit en C: `dedup.ts` (nuevo) · `rss.service.ts` · `contest-key
 - `dedup.ts` — `export function sourcesOf(contest: Contest): ContestSource[]` = `contest.sources ?? (contest.source ? [contest.source] : [])`; en `mergeContests`, `sources` = unión sin duplicados de `sourcesOf(ganador) + sourcesOf(perdedor)`.
 - `feed-sources.ts` — `export const SOURCE_LABELS: Record<ContestSource, string>` = `{ escritores: 'Escritores', letralia: 'Letralia', guiadeconcursos: 'Guía de Concursos', letrasespanolas: 'Letras Españolas' }`.
 
-**D3 — Orden** (`contest-store.service.ts`, `applyFilters`, ~líneas 127-132)
+**D3 — Orden** (`contest-store.service.ts`, `applyFilters`, ~líneas 135-159)
 ```typescript
-// bloques en AMBOS órdenes: 0=futuro, 1=cerrado, 2=sin fecha (final)
+// Implementado (opción A): en 'oldest' rank = 0=futuro, 1=cerrado, 2=sin fecha;
+// en 'newest' el rank de bloque se invierte (espejo completo: sin fecha → cerrados → futuros)
 const now = Date.now(); // 1 vez por sort, no en cada comparación
-const rank = (c: Contest) => (!c.deadline ? 2 : c.deadline.getTime() < now ? 1 : 0);
+const getBlockRank = (c: Contest) => (!c.deadline ? 2 : c.deadline.getTime() < now ? 1 : 0);
 // rank distinto → ordenar por rank; si no → diff por (deadline ?? pubDate) según sortOrder
 ```
 - Mismo criterio de "cerrado" que `isDeadlinePassed` (`app.component.ts:85-88`): los cierres de hoy pasan a bloque 2 a medianoche.
@@ -153,11 +155,11 @@ const rank = (c: Contest) => (!c.deadline ? 2 : c.deadline.getTime() < now ? 1 :
     - log resumen de conteos por source en consola;
     - certamen duplicado escritores+JSON → **1 sola card** con **2 chips** de fuente;
     - badge presente en las 4 fuentes; footer con las 4 fuentes + cita de Letras Españolas;
-    - **orden**: cierres futuros → cerrados → sin fecha al final (en "más antiguo" y "más reciente");
+    - **orden**: "más próximo" → futuros → cerrados → sin fecha; "más lejano" → espejo completo (sin fecha → cerrados → futuros);
     - **checkboxes Fuente**: ninguna marcada = todas; "solo Letras Españolas" ≈ 182; combinar varias; `clearFilters` los resetea; `hasActiveFilters` reacciona;
     - filtros, búsqueda (debounce), temas, header scroll → sin regresiones.
-21. Docs: `CHANGELOG.md` (`Unreleased → Added`: badge de fuente, filtro por fuente, orden con sin-fecha al final, 4 fuentes + cita) · `AGENTS.md` (línea "RSS Source" → 4 fuentes; la nota "No hay tests" es obsoleta — hay Jest con 31 tests).
-22. Commits separados: `feat` (D completo) · `test` (E) · `docs` (F). Push con flujo `push-develop`. **El commit de C va primero.**
+21. Docs: `CHANGELOG.md` ✅ (entradas de D ya en `Unreleased`) · `AGENTS.md` ✅ (RSS Source → 4 fuentes, "No hay tests" → Jest 73 tests).
+22. Commits separados: `feat` (D) ✅ · `test` (E) ✅ `f71409a` · `docs` (F) ✅. Push con flujo `push-develop`.
 
 ---
 
