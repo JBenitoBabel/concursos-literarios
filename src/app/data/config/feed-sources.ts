@@ -9,6 +9,13 @@ export interface FeedSource {
   useProxy: boolean;
 }
 
+export const SOURCE_LABELS: Record<ContestSource, string> = {
+  escritores: 'Escritores',
+  letralia: 'Letralia',
+  guiadeconcursos: 'Guía de Concursos',
+  letrasespanolas: 'Letras Españolas',
+};
+
 export const FEED_SOURCES: FeedSource[] = [
   {
     id: 'escritores',

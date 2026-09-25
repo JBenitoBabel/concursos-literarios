@@ -14,6 +14,7 @@ export interface Contest {
   country?: string;
   rawDescription: string;
   source?: ContestSource;
+  sources?: ContestSource[];
 }
 
 export type FilterCategory = 'all' | 'poesia' | 'novela' | 'relato' | 'ensayo' | 'teatro' | 'infantil' | 'otro';
