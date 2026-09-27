@@ -22,8 +22,11 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Changed
 
-- Botón "Filtros" del acordeón con aspecto de cabecera (fondo `--bg-subtle`, borde, estado abierto resaltado en `--accent-soft`) para diferenciarlo del resto de controles del panel.
-- "Ordenar por" sustituido por un control segmentado de dos opciones inline (radios con estilo de chip): desaparece el `<select>` nativo, cuyo desplegable se abría alejado del control en móvil; en pantallas ≤768 px las opciones se apilan en columna.
+- Botón "Filtros" del acordeón con aspecto de cabecera (fondo `--bg-subtle`, borde, hover con `--bg-card` + borde `--accent`) y estado abierto con acento sólido (`--accent` con texto y badge invertidos), para que el estado activo sea inequívoco y no se confunda con el hover.
+- "Ordenar por" (control segmentado de dos opciones que sustituye al `<select>` nativo) sacado del panel de filtros y ubicado en la barra de resultados junto al contador ("X concursos encontrados"): al ser una acción de vista y no un filtro, queda siempre visible en móvil sin abrir Filtros; las opciones llevan iconos Lucide de dirección (`arrow-up-narrow-wide` / `arrow-down-wide-narrow`) y en móvil se muestran en horizontal debajo del contador en lugar de apilarse dentro del panel.
+- Hover de los chips del control segmentado corregido: `--accent-soft` coincide con `--bg-subtle` en el tema modern, por lo que no se veía; ahora usa `--bg-card` con borde interior, sin afectar al chip activo ni al anillo de foco.
+- "Limpiar filtros" deja de resetear el orden de la lista: los filtros afectan al contenido y el orden a la presentación; se elimina `sortOrder` de `clearFilters()` para evitar cambios sorpresa.
+- Limpieza de CSS muerto en `app.component.scss` (selectores `header-content`/`header-actions`/`header-side`, `.filter-actions` y bloque duplicado de `wonderful` en `.filters-section`).
 - Búsqueda con debounce de 300 ms para no recalcular el listado en cada tecla.
 - Iconos de UI unificados con Lucide: favicon con el glifo `book` del título, paths de iconos inline actualizados a la versión actual de Lucide y crédito voluntario en el footer.
 - Botón `Limpiar filtros` reubicado debajo de la fila de filtros (no en línea) para mejor jerarquía.

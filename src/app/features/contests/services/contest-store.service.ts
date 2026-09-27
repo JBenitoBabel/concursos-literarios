@@ -205,7 +205,6 @@ export class ContestStoreService implements OnDestroy {
     this.selectedPrizeTypes.set([]);
     this.selectedMonths.set([]);
     this.selectedSources.set([]);
-    this.sortOrder.set('oldest');
     this.applyFilters();
   }
 

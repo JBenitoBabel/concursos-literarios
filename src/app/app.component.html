@@ -162,23 +162,6 @@
           </div>
         </div>
 
-        <div class="filter-group">
-          <span id="sort-label" class="filter-label">Ordenar por</span>
-          <div class="segmented" role="radiogroup" aria-labelledby="sort-label" data-testid="sort-select">
-            @for (s of sortOptions; track s.value) {
-              <label class="segmented-item">
-                <input
-                  type="radio"
-                  name="sort-order"
-                  [value]="s.value"
-                  [checked]="store.sortOrder() === s.value"
-                  (change)="store.setSortOrder(s.value)"
-                  [attr.aria-label]="s.ariaLabel">
-                <span>{{ s.label }}</span>
-              </label>
-            }
-          </div>
-        </div>
       </div>
 
       @if (store.hasActiveFilters()) {
@@ -190,11 +173,40 @@
       }
       </div>
 
-      <div class="results-count">
-        {{ store.filteredContests().length }} concurso{{ store.filteredContests().length !== 1 ? 's' : '' }} encontrado{{ store.filteredContests().length !== 1 ? 's' : '' }}
-        @if (store.hasActiveFilters()) {
-          <span class="filter-badge">(filtrado)</span>
-        }
+      <div class="results-toolbar">
+        <div class="results-count">
+          {{ store.filteredContests().length }} concurso{{ store.filteredContests().length !== 1 ? 's' : '' }} encontrado{{ store.filteredContests().length !== 1 ? 's' : '' }}
+          @if (store.hasActiveFilters()) {
+            <span class="filter-badge">(filtrado)</span>
+          }
+        </div>
+
+        <div class="sort-control">
+          <span id="sort-label" class="filter-label">Ordenar por</span>
+          <div class="segmented" role="radiogroup" aria-labelledby="sort-label" data-testid="sort-select">
+            @for (s of sortOptions; track s.value) {
+              <label class="segmented-item">
+                <input
+                  type="radio"
+                  name="sort-order"
+                  [value]="s.value"
+                  [checked]="store.sortOrder() === s.value"
+                  (change)="store.setSortOrder(s.value)"
+                  [attr.aria-label]="s.ariaLabel">
+                <span>
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    @if (s.value === 'oldest') {
+                      <path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="M11 12h4"/><path d="M11 16h7"/><path d="M11 20h10"/>
+                    } @else {
+                      <path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="M11 4h10"/><path d="M11 8h7"/><path d="M11 12h4"/>
+                    }
+                  </svg>
+                  {{ s.label }}
+                </span>
+              </label>
+            }
+          </div>
+        </div>
       </div>
     </section>
 

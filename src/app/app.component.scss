@@ -93,13 +93,6 @@ $transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
-// compat: keep old selectors if any external ref, but map to new
-.header-content,
-.header-actions,
-.header-side {
-  display: contents;
-}
-
 .app-title {
   margin: 0;
   font-family: var(--font-display);
@@ -158,23 +151,6 @@ $transition: all 0.2s ease;
       text-decoration: underline;
     }
   }
-}
-
-.header-actions {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.header-side {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
 }
 
 .last-updated {
@@ -365,19 +341,18 @@ $transition: all 0.2s ease;
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: 0.5rem 0.75rem;
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-secondary);
   text-align: center;
-  border-radius: calc(var(--radius-sm) * 0.6);
+  white-space: nowrap;
   cursor: pointer;
   user-select: none;
-  transition: background 0.15s ease, color 0.15s ease;
 
-  &:hover span {
-    background: var(--accent-soft);
+  &:hover input:not(:checked):not(:focus-visible) + span {
+    background: var(--bg-card);
     color: var(--text-primary);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
   }
 
   input[type="radio"] {
@@ -399,11 +374,20 @@ $transition: all 0.2s ease;
 }
 
 .segmented-item span {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
   width: 100%;
-  padding: 0.25rem 0.375rem;
+  padding: 0.625rem 0.75rem;
   border-radius: calc(var(--radius-sm) * 0.6);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+
+  .icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
 }
 
 .checkbox-group {
@@ -478,10 +462,6 @@ $transition: all 0.2s ease;
   box-shadow: 0 0 0 3px var(--accent-ring);
 }
 
-.filter-actions {
-  align-self: flex-end;
-}
-
 .filter-actions-below {
   display: flex;
   justify-content: flex-start;
@@ -492,10 +472,18 @@ $transition: all 0.2s ease;
   }
 }
 
-.results-count {
+.results-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: var(--border-width) solid var(--border);
+}
+
+.results-count {
   font-size: 0.9rem;
   color: var(--text-secondary);
   font-weight: 500;
@@ -508,6 +496,16 @@ $transition: all 0.2s ease;
     border-radius: 999px;
     font-size: 0.75rem;
     font-weight: 600;
+  }
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .segmented {
+    flex: 0 0 auto;
   }
 }
 
@@ -873,7 +871,6 @@ $transition: all 0.2s ease;
 .filters-toggle {
   display: none;
   width: 100%;
-  justify-content: flex-start;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   min-height: 44px;
@@ -882,10 +879,9 @@ $transition: all 0.2s ease;
   border-radius: var(--radius-md);
   color: var(--text-primary);
 
-  &:hover {
-    background: var(--accent-soft);
-    border-color: var(--card-hover-border);
-    color: var(--text-primary);
+  &:not([aria-expanded='true']):hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
   }
 
   &:focus-visible {
@@ -894,8 +890,14 @@ $transition: all 0.2s ease;
   }
 
   &[aria-expanded='true'] {
-    background: var(--accent-soft);
+    background: var(--accent);
     border-color: var(--accent);
+    color: var(--accent-contrast);
+
+    .filters-toggle-count {
+      background: var(--accent-contrast);
+      color: var(--accent);
+    }
   }
 }
 
@@ -1164,7 +1166,8 @@ $transition: all 0.2s ease;
 }
 
 [data-theme='wonderful'] .filters-section {
-  border: 1px solid var(--border-strong);
+  border: 1px dashed #ffd1a9;
+  background: #fff;
   box-shadow: var(--shadow-md);
 }
 
@@ -1189,11 +1192,6 @@ $transition: all 0.2s ease;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.01em;
-}
-
-[data-theme='wonderful'] .filters-section {
-  border: 1px dashed #ffd1a9;
-  background: #fff;
 }
 
 [data-theme='retro'] .app-header {
@@ -1364,12 +1362,28 @@ $transition: all 0.2s ease;
     }
   }
 
-  .segmented {
+  .results-toolbar {
     flex-direction: column;
+    align-items: stretch;
   }
 
-  .filter-actions {
-    align-self: stretch;
+  .sort-control {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+
+    .segmented {
+      flex: 1;
+    }
+
+    .segmented-item {
+      white-space: normal;
+      font-size: 0.8rem;
+
+      span {
+        padding: 0.5rem 0.375rem;
+      }
+    }
   }
 
   .contests-list {
