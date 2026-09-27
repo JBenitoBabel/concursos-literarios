@@ -208,6 +208,26 @@ export class ContestStoreService implements OnDestroy {
     this.applyFilters();
   }
 
+  clearCategories(): void {
+    this.selectedCategories.set([]);
+    this.applyFilters();
+  }
+
+  clearPrizeTypes(): void {
+    this.selectedPrizeTypes.set([]);
+    this.applyFilters();
+  }
+
+  clearMonths(): void {
+    this.selectedMonths.set([]);
+    this.applyFilters();
+  }
+
+  clearSources(): void {
+    this.selectedSources.set([]);
+    this.applyFilters();
+  }
+
   formatMonthLabel(ym: string): string {
     const [year, month] = ym.split('-');
     const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',

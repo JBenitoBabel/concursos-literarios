@@ -9,6 +9,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Added
 
+- Checkbox "Todas"/"Todos" como primera opción en los 4 grupos de filtros (categoría, tipo de premio, mes de cierre y fuente): marcado cuando el grupo no tiene filtro, indica que se muestran todos; al elegir una opción individual se desmarca y al desmarcar la última vuelve a marcarse.
 - Redes sociales (Bluesky e Instagram) en el footer con iconos de Simple Icons, en la misma fila que el eslogan "Recursos escritoriles" y la autoría "© Julia Bengar"; crédito a Simple Icons en el pie y `meta author` en `index.html`.
 - Panel de filtros colapsable en móvil (≤768 px): botón "Filtros" con contador de filtros activos y chevron; colapsado por defecto, con buscador y contador de resultados siempre visibles; en escritorio los filtros siguen siempre desplegados.
 - Filtro por fuente con checkboxes en los filtros (ninguna marcada = todas las fuentes): aplica sobre lo ya descargado, sin volver a pedir los feeds, y se incluye en "Limpiar filtros".
@@ -22,6 +23,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Changed
 
+- Cajas de los grupos de filtros alineadas y con la misma altura en escritorio: la caja de "Fuente" (con menos opciones) quedaba más pequeña y con la etiqueta por debajo del resto por la alineación inferior de la fila de filtros.
 - Botón "Filtros" del acordeón con aspecto de cabecera (fondo `--bg-subtle`, borde, hover con `--bg-card` + borde `--accent`) y estado abierto con acento sólido (`--accent` con texto y badge invertidos), para que el estado activo sea inequívoco y no se confunda con el hover.
 - "Ordenar por" (control segmentado de dos opciones que sustituye al `<select>` nativo) sacado del panel de filtros y ubicado en la barra de resultados junto al contador ("X concursos encontrados"): al ser una acción de vista y no un filtro, queda siempre visible en móvil sin abrir Filtros; las opciones llevan iconos Lucide de dirección (`arrow-up-narrow-wide` / `arrow-down-wide-narrow`) y en móvil se muestran en horizontal debajo del contador en lugar de apilarse dentro del panel.
 - Hover de los chips del control segmentado corregido: `--accent-soft` coincide con `--bg-subtle` en el tema modern, por lo que no se veía; ahora usa `--bg-card` con borde interior, sin afectar al chip activo ni al anillo de foco.

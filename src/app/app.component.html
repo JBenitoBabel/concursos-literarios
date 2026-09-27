@@ -71,6 +71,18 @@
         <div class="filter-group">
           <label class="filter-label">Categoría</label>
           <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                [checked]="store.selectedCategories().length === 0"
+                (change)="store.clearCategories()"
+                aria-label="Todas las categorías"
+                data-testid="checkbox-all-categories">
+              <span class="checkbox-custom">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span>Todas</span>
+            </label>
             @for (cat of categories; track cat.value) {
               <label class="checkbox-item">
                 <input
@@ -91,6 +103,18 @@
         <div class="filter-group">
           <label class="filter-label">Tipo de premio</label>
           <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                [checked]="store.selectedPrizeTypes().length === 0"
+                (change)="store.clearPrizeTypes()"
+                aria-label="Todos los tipos de premio"
+                data-testid="checkbox-all-prize">
+              <span class="checkbox-custom">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span>Todos</span>
+            </label>
             @for (pt of prizeTypes; track pt.value) {
               <label class="checkbox-item">
                 <input
@@ -111,6 +135,18 @@
         <div class="filter-group">
           <label class="filter-label">Mes de cierre</label>
           <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                [checked]="store.selectedMonths().length === 0"
+                (change)="store.clearMonths()"
+                aria-label="Todos los meses de cierre"
+                data-testid="checkbox-all-months">
+              <span class="checkbox-custom">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span>Todos</span>
+            </label>
             @for (m of store.availableMonths(); track m.value) {
               <label class="checkbox-item">
                 <input
@@ -145,6 +181,18 @@
         <div class="filter-group">
           <label class="filter-label">Fuente</label>
           <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input
+                type="checkbox"
+                [checked]="store.selectedSources().length === 0"
+                (change)="store.clearSources()"
+                aria-label="Todas las fuentes"
+                data-testid="checkbox-all-sources">
+              <span class="checkbox-custom">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span>Todas</span>
+            </label>
             @for (s of sources; track s.value) {
               <label class="checkbox-item">
                 <input

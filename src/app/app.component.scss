@@ -307,7 +307,7 @@ $transition: all 0.2s ease;
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
-  align-items: flex-end;
+  align-items: stretch;
 }
 
 .filter-group {
@@ -393,6 +393,8 @@ $transition: all 0.2s ease;
 .checkbox-group {
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
+  flex: 1;
   gap: 0.375rem;
   max-height: 132px;
   overflow-y: auto;
