@@ -103,21 +103,27 @@ export class DataService {
 
 ## Documentación en `/docs`
 
+> **¿Qué está hecho y qué queda pendiente?** Consultar siempre primero [`docs/ROADMAP.md`](./docs/ROADMAP.md) — es el índice de estado de todos los planes.
+
 | Archivo | Descripción | Ver |
 |---------|-------------|-----|
-| `REFACTOR_PLAN.md` | Auditoría SOLID + Angular Best Practices, arquitectura objetivo, prioridades P0-P3 | [docs/REFACTOR_PLAN.md](./docs/REFACTOR_PLAN.md) |
-| `MULTI_SOURCE_PLAN.md` | Expansión a 4 fuentes (escritores.org, Letralia, Guiadeconcursos, Letras Españolas) con deduplicación | [docs/MULTI_SOURCE_PLAN.md](./docs/MULTI_SOURCE_PLAN.md) |
-| `SEO_PLAN.md` | SEO técnico: prerendering SSG, meta tags dinámicos, JSON-LD, sitemap, cron diario Vercel | [docs/SEO_PLAN.md](./docs/SEO_PLAN.md) |
+| `ROADMAP.md` | **Estado consolidado de todos los planes** (hecho/parcial/pendiente), dependencias y conflictos entre planes, decisiones abiertas | [docs/ROADMAP.md](./docs/ROADMAP.md) |
+| `FASE1_PLAN.md` | Multi-fuentes (4 fuentes): ✅ completado 2026-09-25 con 73 tests | [docs/FASE1_PLAN.md](./docs/FASE1_PLAN.md) |
+| `REFACTOR_PLAN.md` | Auditoría SOLID + Angular Best Practices, arquitectura objetivo, prioridades P0-P3 (🟡 ~70% hecho) | [docs/REFACTOR_PLAN.md](./docs/REFACTOR_PLAN.md) |
+| `MULTI_SOURCE_PLAN.md` | Expansión a 4 fuentes (escritores.org, Letralia, Guiadeconcursos, Letras Españolas) con deduplicación (✅ ejecutado vía Fase 1) | [docs/MULTI_SOURCE_PLAN.md](./docs/MULTI_SOURCE_PLAN.md) |
+| `PROPUESTAS_PLAN.md` | Formulario público de propuestas de concursos + moderación manual en `/admin` con Firebase (Firestore + Auth), router, anti-spam y TTL (📋 aprobado, no iniciado) | [docs/PROPUESTAS_PLAN.md](./docs/PROPUESTAS_PLAN.md) |
+| `SEO_PLAN.md` | SEO técnico: prerendering SSG, meta tags dinámicos, JSON-LD, sitemap, cron diario Vercel (⏳ pendiente) | [docs/SEO_PLAN.md](./docs/SEO_PLAN.md) |
+| `NEWSLETTER_PLAN.md` | Newsletter email con Supabase + Resend (⏸️ P2 post-SEO; ⚠️ conflicto de backend con PROPUESTAS/Firebase — ver ROADMAP) | [docs/NEWSLETTER_PLAN.md](./docs/NEWSLETTER_PLAN.md) |
 | `CHANGELOG.md` (raíz) | Registro de cambios por versión (Keep a Changelog 1.1.0); mover `Unreleased` a nueva versión al lanzar | [CHANGELOG.md](./CHANGELOG.md) |
 
 > **Importante:** No duplicar contenido de estos archivos aquí. Consultar los originales para detalles completos.
 
 ---
 
-## Decisiones Pendientes (ver `docs/REFACTOR_PLAN.md`)
+## Decisiones Pendientes (ver [`docs/ROADMAP.md`](./docs/ROADMAP.md))
 
 - [ ] ¿Mantener multi-tema (modern/scifi/wonderful/retro) o simplificar?
-- [ ] ¿Virtual scrolling necesario ya? (185 items OK sin él, pero escala)
+- [x] ~~¿Virtual scrolling necesario ya?~~ — descartado y revertido (2026-09-25); si escala, paginación / "cargar más"
 - [ ] ¿IndexedDB para cache histórico entre sesiones?
 - [ ] ¿Service Worker / PWA para offline?
 
@@ -125,8 +131,8 @@ export class DataService {
 
 ## Notas para Agentes Futuros
 
-1. **El refactor SOLID y multi-fuentes son complementarios** - El plan multi-fuentes ya prevé strategy pattern para parsers que encaja en la arquitectura objetivo del refactor
-2. **Recomendación:** Implementar multi-fuentes primero (valor inmediato usuario), luego refactor SOLID
+1. **Antes de empezar, leer [`docs/ROADMAP.md`](./docs/ROADMAP.md)** - Ahí está el estado real de cada plan (hecho/parcial/pendiente), el siguiente desarrollo recomendado y los conflictos entre planes. No deducir el estado leyendo solo `AGENTS.md`.
+2. **Multi-fuentes ya está completado** (Fase 1, 2026-09-25) - El strategy pattern de parsers ya existe (`PARSERS`); los planes nuevos deben seguir la arquitectura objetivo de `REFACTOR_PLAN.md` (servicios, pipes, OnPush) para no generar deuda. **Siguiente desarrollo previsto:** `PROPUESTAS_PLAN.md` (Fase A: router + extracción de `HomeComponent`).
 3. **Tests con Jest** - `npm run test` (73 tests: parsers, dedup y extractors); los cambios de UI se verifican además manualmente con `ng serve`
 4. **CSS Variables theming** - Temas definidos en `:root` y `[data-theme="..."]` en `styles.scss`
 5. **CORS Proxies** - Cascada de 2 proxies (`allorigins`, `jina`) en `rss.service.ts:CORS_PROXIES`; el JSON de Letras Españolas va directo (CORS `*`)
