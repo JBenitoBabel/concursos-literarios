@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed, ChangeDetectionStrategy, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { inject as injectAnalytics } from '@vercel/analytics';
 import { ContestStoreService } from './features/contests/services/contest-store.service';
 import { CategoryClassPipe } from './features/contests/pipes/category-class.pipe';
 import { CategoryLabelPipe } from './features/contests/pipes/category-label.pipe';
@@ -62,6 +63,13 @@ export class AppComponent implements OnInit {
     value: source.id,
     label: SOURCE_LABELS[source.id]
   }));
+
+  constructor() {
+    // Initialize Vercel Analytics (browser-side only)
+    if (typeof window !== 'undefined') {
+      injectAnalytics();
+    }
+  }
 
   ngOnInit() {
     this.store.loadContests();
