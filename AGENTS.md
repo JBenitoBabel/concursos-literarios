@@ -15,6 +15,7 @@
 - TypeScript 5.3
 - Jest (jest-preset-angular; tests con `npm run test`)
 - Angular CLI 17.2.1
+- @vercel/analytics 2.0.1 (Vercel Web Analytics, solo producción)
 
 ### Estructura Principal
 ```

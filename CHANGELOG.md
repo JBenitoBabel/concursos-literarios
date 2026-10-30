@@ -9,6 +9,7 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Added
 
+- Vercel Web Analytics integrado con `@vercel/analytics` v2.0.1, inicializado en `AppComponent` con guard `typeof window !== 'undefined'` (compatible con el futuro prerendering de `SEO_PLAN.md`); no envía datos en desarrollo.
 - Checkbox "Todas"/"Todos" como primera opción en los 4 grupos de filtros (categoría, tipo de premio, mes de cierre y fuente): marcado cuando el grupo no tiene filtro, indica que se muestran todos; al elegir una opción individual se desmarca y al desmarcar la última vuelve a marcarse.
 - Redes sociales (Bluesky e Instagram) en el footer con iconos de Simple Icons, en la misma fila que el eslogan "Recursos escritoriles" y la autoría "© Julia Bengar"; crédito a Simple Icons en el pie y `meta author` en `index.html`.
 - Panel de filtros colapsable en móvil (≤768 px): botón "Filtros" con contador de filtros activos y chevron; colapsado por defecto, con buscador y contador de resultados siempre visibles; en escritorio los filtros siguen siempre desplegados.

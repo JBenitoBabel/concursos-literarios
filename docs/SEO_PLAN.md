@@ -138,7 +138,7 @@ npm run build
 | Verificar propiedad (DNS TXT) | Pendiente |
 | Enviar sitemap.xml | Pendiente |
 | Vercel Speed Insights | ✅ Automático en Hobby |
-| Vercel Web Analytics | Opcional (gratis) |
+| Vercel Web Analytics | ✅ Instalado (2026-10-30) — `@vercel/analytics` v2.0.1 inicializado en `AppComponent` |
 
 ---
 
@@ -236,7 +236,7 @@ src/app/services/rss.service.ts  # Leer assets/rss-data.json en browser
 3. **JSON-LD** (rich snippets)
 4. **Sitemap + robots** (indexación completa)
 5. **Cron diario** (datos frescos)
-6. **GSC + Vercel Analytics** (medición)
+6. **GSC + Vercel Analytics** (medición) — 🟡 Vercel Web Analytics hecho (2026-10-30); Google Search Console pendiente
 
 ---
 
