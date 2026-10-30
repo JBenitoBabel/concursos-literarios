@@ -25,9 +25,11 @@
             </button>
           }
         </div>
-        <div class="last-updated" *ngIf="store.lastUpdated()">
-          Actualizado: {{ store.lastUpdated() | date:'dd/MM/yyyy HH:mm' }}
-        </div>
+        @if (store.lastUpdated()) {
+          <div class="last-updated">
+            Actualizado: {{ store.lastUpdated() | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+        }
       </div>
     </div>
   </header>
