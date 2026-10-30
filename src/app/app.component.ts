@@ -14,12 +14,11 @@ import { FEED_SOURCES, SOURCE_LABELS } from './data/config/feed-sources';
 import { sourcesOf as contestSourcesOf } from './data/services/dedup';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, FormsModule, CategoryClassPipe, CategoryLabelPipe, PrizeLabelPipe, InViewportDirective],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-root',
+    imports: [CommonModule, FormsModule, CategoryClassPipe, CategoryLabelPipe, PrizeLabelPipe, InViewportDirective],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   store = inject(ContestStoreService);
