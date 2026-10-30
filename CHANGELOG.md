@@ -24,6 +24,10 @@ y este proyecto está adherido al [Versionamiento Semántico](https://semver.org
 
 ### Changed
 
+- **Angular 17.2 → 22.2** (salto escalonado 18 → 19 → 20 → 21 → 22 con `ng update`): TypeScript 5.3 → 6.0, zone.js 0.15, control flow completo (`*ngIf` residual migrado a `@if`), migración al nuevo build system `@angular/build` (esbuild/Vite, retirado el devkit webpack deprecado) y `provideHttpClient(withXhr())` para conservar el backend XHR. Requiere **Node >= 22.22.3** (añadido `engines`).
+- Stack de tests actualizado: Jest 29 → 30, `jest-preset-angular` 14 → 17, `@testing-library/angular` 17 → 19 y config `ts-jest` movida de `globals` a `transform`.
+- Eliminadas las dependencias residuales de Karma/Jasmine (`karma*`, `jasmine-core`, `@types/jasmine`) y el target `test` de `angular.json`; el proyecto usa Jest.
+- Budget `anyComponentStyle` subido de 22 kB a 25 kB (warning) tras el crecimiento del SCSS.
 - Cajas de los grupos de filtros alineadas y con la misma altura en escritorio: la caja de "Fuente" (con menos opciones) quedaba más pequeña y con la etiqueta por debajo del resto por la alineación inferior de la fila de filtros.
 - Botón "Filtros" del acordeón con aspecto de cabecera (fondo `--bg-subtle`, borde, hover con `--bg-card` + borde `--accent`) y estado abierto con acento sólido (`--accent` con texto y badge invertidos), para que el estado activo sea inequívoco y no se confunda con el hover.
 - "Ordenar por" (control segmentado de dos opciones que sustituye al `<select>` nativo) sacado del panel de filtros y ubicado en la barra de resultados junto al contador ("X concursos encontrados"): al ser una acción de vista y no un filtro, queda siempre visible en móvil sin abrir Filtros; las opciones llevan iconos Lucide de dirección (`arrow-up-narrow-wide` / `arrow-down-wide-narrow`) y en móvil se muestran en horizontal debajo del contador en lugar de apilarse dentro del panel.

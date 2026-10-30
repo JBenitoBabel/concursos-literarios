@@ -3,18 +3,19 @@
 ## Información del Proyecto
 
 **Nombre:** ConcursosLiterarios  
-**Framework:** Angular 17.2 (standalone components, signals)  
+**Framework:** Angular 22.2 (standalone components, signals)  
 **Estilo:** SCSS con CSS Variables theming  
 **RSS Source:** 4 fuentes — escritores.org, Letralia, Guía de Concursos (RSS/XML + fallback Jina AI markdown) y Letras Españolas (JSON, CORS directo)  
 **Deployment:** Vercel (ver `.vercel/project.json`)  
 
 ### Stack Tecnológico
-- Angular 17.2 (core, common, compiler, forms, platform-browser, router, animations)
+- Angular 22.2 (core, common, compiler, forms, platform-browser, router, animations)
 - RxJS 7.8
 - date-fns 4.4
-- TypeScript 5.3
-- Jest (jest-preset-angular; tests con `npm run test`)
-- Angular CLI 17.2.1
+- TypeScript 6.0
+- Jest 30 (jest-preset-angular 17; tests con `npm run test`)
+- Angular CLI 22.2.5 + `@angular/build` (build system esbuild/Vite; webpack devkit retirado)
+- **Node >= 22.22.3** (requisito de la CLI 22; ver `engines` en `package.json`)
 - @vercel/analytics 2.0.1 (Vercel Web Analytics, solo producción)
 
 ### Estructura Principal
